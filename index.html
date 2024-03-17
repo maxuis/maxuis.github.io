@@ -19,9 +19,9 @@
   <body data-bs-theme="dark"> <!-- Especificar el tema del cuerpo = oscuro-->
     <!-- Comienzo del menú -->
     <nav class="navbar bg-body-tertiary fixed-top" data-bs-theme="dark"> <!-- la barra de navegación 
-    se encontrará en la parte superior del documento aun si el usuario se desplaza hacia abajo -->
-    <!-- Comienzo de contenido centrado-->
-    <div class="text-center">
+      se encontrará en la parte superior del documento aun si el usuario se desplaza hacia abajo -->
+      <!-- Comienzo de contenido centrado-->
+      <div class="text-center">
         <div class="container-fluid"> <!-- El contenido debe ser responsivo -->
           <div class="container"> <!-- se define una clase contenedora -->
             <a class="navbar-brand" href="#"> <!-- Enlace de logo tipo, con dirección vacía-->
@@ -44,51 +44,54 @@
           <!-- Definir un Canvas para el menú -->
         <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" 
           aria-labelledby="offcanvasNavbarLabel">
-          <div class="offcanvas-header"> <!-- En la cabeza del menú, su nombre -->
-            <h5 class="offcanvas-title" id="offcanvasNavbarLabel">MENU</h5> <!-- tamaño de letra del nombre -->
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"> <!--
+          <div>
+            <div class="offcanvas-header"> <!-- En la cabeza del menú, su nombre -->
+              <h5 class="offcanvas-title" id="offcanvasNavbarLabel">MENU</h5> <!-- tamaño de letra del nombre -->
+              <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"> <!--
               Especificar un boton para cerrar el menú -->
-            </button>
-            <!--Comienzo del cuerpo del canvas del menú -->
-              </div>
-                <div class="offcanvas-body">                
-                  <ul class="navbar-nav justify-content-end flex-grow-1 pe-3"><!--
-                    Justificar al extremo derecho para crezca hacia la izquierda del cuerpo de la pagina -->
-                    <li class="nav-item"> <!-- Abrir un item que direccione a la pág. principal -->
-                      <a class="nav-link" href="index.html">Página Principal</a>
-                    </li>                  
-                    <li class="nav-item"><!-- Abrir un item que direccione a los créditos por usar programas -->
-                      <a class="nav-link" href="" target="_blank">Créditos</a>
-                    </li>
-                    <li class="nav-item"><!-- Abrir un item que direccione al PIF con sus 
+              </button>
+              <!--Comienzo del cuerpo del canvas del menú -->
+            </div>
+            <div>
+              <div class="offcanvas-body">                
+                <ul class="navbar-nav justify-content-end flex-grow-1 pe-3"><!--
+                  Justificar al extremo derecho para crezca hacia la izquierda del cuerpo de la pagina -->
+                  <li class="nav-item"> <!-- Abrir un item que direccione a la pág. principal -->
+                    <a class="nav-link" href="index.html">Página Principal</a>
+                  </li>                  
+                  <li class="nav-item"><!-- Abrir un item que direccione a los créditos por usar programas -->
+                    <a class="nav-link" href="" target="_blank">Créditos</a>
+                  </li>
+                  <li class="nav-item"><!-- Abrir un item que direccione al PIF con sus 
                       links a capitulos en Youtube -->
-                      <a class="nav-link" href="">Proyecto</a>
-                    </li>
-                    <!-- Comienzo de Sub-Menú -->
-                    <li class="nav-item dropdown">
-                      <a class="nav-link dropdown-toggle" href="#" 
+                    <a class="nav-link" href="">Proyecto</a>
+                  </li>
+                  <!-- Comienzo de Sub-Menú -->
+                  <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" 
                       role="button" data-bs-toggle="dropdown" 
                       aria-expanded="false">Proyecto Integrador Final</a> <!-- Nombrar el sub-menú -->
-                      <ul class="dropdown-menu">
-                        <li><!-- Item del sub menú que direcciona a juegos en web -->
-                          <a class="dropdown-item" href="">Juega en la Web</a> 
-                        </li>
-                        <li><!-- Item del sub menú que direcciona para descargar para Android -->
-                            <a class="dropdown-item" href="">Descarga para Android</a>
-                        </li>
-                        <li><!-- Item del sub menú que direccciona para descargar para PC-->
-                            <a class="dropdown-item" href="">Descarga para PC</a>
-                        </li>                                                                     
-                      </ul>
-                    </li>
-                  </ul>                  
-                </div>
-              </div> 
-            </div>                     
+                    <ul class="dropdown-menu">
+                       <li><!-- Item del sub menú que direcciona a juegos en web -->
+                         <a class="dropdown-item" href="">Juega en la Web</a> 
+                      </li>
+                       <li><!-- Item del sub menú que direcciona para descargar para Android -->
+                           <a class="dropdown-item" href="">Descarga para Android</a>
+                      </li>
+                       <li><!-- Item del sub menú que direccciona para descargar para PC-->
+                          <a class="dropdown-item" href="">Descarga para PC</a>
+                      </li>                                                                     
+                    </ul> <!-- Finalizar sub menú -->
+                  </li>
+                </ul> <!-- Finalizar menú -->                                
+              </div> <!-- Finalizar el cuerpo del canvas --> 
+            </div>                               
           </div>
-        </div>
-      </div>
-    </nav>
+        </div> 
+      </div> <!-- Finalizar menú -->
+    </nav> <!-- Finalizar la barra de navegación -->
     <img src="..." class="img-fluid" alt="..."><!-- Imagen del fondo -->    
   </body>
+  <!-- Finalizar cuerpo del documento -->
 </html>
+<!-- Finalizar archivo Html -->
