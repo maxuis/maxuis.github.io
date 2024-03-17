@@ -115,3 +115,22 @@
     --bs-form-invalid-color: #dc3545;
     --bs-form-invalid-border-color: #dc3545;
 }
+
+:root {
+    --bs-breakpoint-xs: 0;
+    --bs-breakpoint-sm: 576px;
+    --bs-breakpoint-md: 768px;
+    --bs-breakpoint-lg: 992px;
+    --bs-breakpoint-xl: 1200px;
+    --bs-breakpoint-xxl: 1400px;
+    scroll-behavior: smooth;    
+}
+
+html {
+    display: block;
+}
+
+*, ::after, ::before {
+    box-sizing: border-box;
+}
+
