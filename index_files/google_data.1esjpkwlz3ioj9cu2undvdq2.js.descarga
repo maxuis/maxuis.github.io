@@ -1,0 +1,10 @@
+try{window.dataLayer=window.dataLayer||[];var isRelease=VEL.Wordwall.Global.Helpers.UrlHelper.isRelease();
+var isAdmin=ServerModel.isAdmin!==undefined&&ServerModel.isAdmin===true;
+if(!isAdmin||!isRelease){var uid=isRelease?"UA-29211054-4":"UA-29211054-5";
+(function(d,k,h,c,j,b,f){d.GoogleAnalyticsObject=j;
+d[j]=d[j]||function(){(d[j].q=d[j].q||[]).push(arguments)
+},d[j].l=1*new Date();b=k.createElement(h),f=k.getElementsByTagName(h)[0];
+b.async=1;b.src=c;f.parentNode.insertBefore(b,f)})(window,document,"script","https://www.google-analytics.com/analytics.js","ga");
+$.get("/api/getclientid",function(a){ga("create",uid,{storage:"none",clientId:a});
+ga("set","anonymizeIp",true);ga("send","pageview")})
+}}catch(e){};
