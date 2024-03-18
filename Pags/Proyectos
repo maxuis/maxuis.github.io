@@ -67,7 +67,7 @@
                   <li class="nav-item"><!-- Abrir un item que direccione
                      al PIF con sus 
                       links a capitulos en Youtube -->
-                    <a class="nav-link" href="" target="_blank">Proyectos</a>
+                    <a class="nav-item" href="" target="_blank">Proyectos</a>
                   </li>
                   <!-- Comienzo de Sub-Menú -->
                   <li class="nav-item dropdown">
