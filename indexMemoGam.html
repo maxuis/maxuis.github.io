@@ -41,8 +41,8 @@
                 var contadorJugadas = parseInt(localStorage.getItem('contadorJugadas')) || 0;
                 contadorJugadas++;
                 localStorage.setItem('contadorJugadas', contadorJugadas);                  
-                // Mostrar el contador en un mensaje de alerta
-                alert('Has jugado ' + contadorJugadas + ' veces.');
+                // Mostrar el contador en un mensaje de alerta        
+                console.log("Has jugado " + contadorJugadas + " veces.");
                 // Barajar las cartas
                 cartas = cartas.concat(cartas).sort(function() { return 0.5 - Math.random() });        
                 // Mostrar las cartas en el tablero
@@ -69,7 +69,7 @@
                         contadorDerrotas++;
                         localStorage.setItem('contadorDerrotas', contadorDerrotas);                    
                         // Mostrar el contador en un mensaje de alerta                    
-                        alert('¡Has perdido! Se acabó el tiempo. Perdiste: '  + contadorJugadas + ' veces.');
+                        console.log("¡Has perdido! Se acabó el tiempo. Perdiste:"   + contadorJugadas + " veces.");
                     }   
                   }
               }, 1000);
@@ -88,8 +88,8 @@
                 var contadorVictorias = parseInt(localStorage.getItem('contadorVictorias')) || 0;
                 contadorVictorias++;
                 localStorage.setItem('contadorVictorias', contadorVictorias);                   
-                // Mostrar el contador en un mensaje de alerta
-                alert('¡Has ganado! ¡Todas las cartas han sido levantadas!... Total Victorias: ' + contadorVictorias );
+                // Mostrar el contador en un mensaje de alerta            
+                console.log("¡Has ganado! ¡Todas las cartas han sido levantadas!... Total Victorias: " + contadorVictorias);
             }
                 }
         </script>
