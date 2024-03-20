@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Juego de Memoria</title>
+        <style>
+            .card {
+                width: 100px;
+                height: 150px;
+                background-color: #CCC;
+                border: 1px solid #000;
+                margin: 10px;
+                display: inline-block;
+                cursor: pointer;
+                text-align: center;
+                line-height: 150px;
+            }
+        </style>
+    </head>
+    <body>
+
+        <center>
+            <button id="jugarBtn" onclick="jugar()">Jugar</button>
+            <div id="cronometro">Tiempo restante: </div>
+            <div id="tablero"></div>
+        </center>    
+
+        <script>
+            var cartas = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+            var tablero = document.getElementById('tablero');
+            var cronometro = document.getElementById('cronometro');
+            var juegoHabilitado = false;
+            var intervalo;
+            // Función para iniciar el juego
+            function jugar() {
+                // Habilitar el juego
+                juegoHabilitado = true;
+                document.getElementById('jugarBtn').disabled = true;
+                // Incrementar el contador en el almacenamiento local
+                var contadorJugadas = parseInt(localStorage.getItem('contadorJugadas')) || 0;
+                contadorJugadas++;
+                localStorage.setItem('contadorJugadas', contadorJugadas);                  
+                // Mostrar el contador en un mensaje de alerta
+                alert('Has jugado ' + contadorJugadas + ' veces.');
+                // Barajar las cartas
+                cartas = cartas.concat(cartas).sort(function() { return 0.5 - Math.random() });        
+                // Mostrar las cartas en el tablero
+                for (var i = 0; i < cartas.length; i++) {
+                    var carta = document.createElement('div');
+                    carta.className = 'card';
+                    carta.dataset.valor = cartas[i];
+                    carta.dataset.estado = 'cerrado';
+                    carta.innerHTML = '?';
+                    carta.onclick = function() { mostrarCarta(this); };
+                    tablero.appendChild(carta);
+                }
+                // Iniciar el cronómetro (180 segundos = 3 minutos)
+                var segundosRestantes = 10;
+                intervalo = setInterval(function() {
+                cronometro.textContent = 'Tiempo restante: ' + segundosRestantes + ' segundos';
+                   segundosRestantes--;
+                   if (segundosRestantes < 0) {
+                    clearInterval(intervalo);
+                    if (juegoHabilitado) {
+                        juegoHabilitado = false;
+                        // Incrementar el contador en el almacenamiento local
+                        var contadorDerrotas = parseInt(localStorage.getItem('contadorDerrotas')) || 0;
+                        contadorDerrotas++;
+                        localStorage.setItem('contadorDerrotas', contadorDerrotas);                    
+                        // Mostrar el contador en un mensaje de alerta                    
+                        alert('¡Has perdido! Se acabó el tiempo. Perdiste: '  + contadorJugadas + ' veces.');
+                    }   
+                  }
+              }, 1000);
+            }
+            // Función para mostrar una carta
+            function mostrarCarta(carta) {
+            if (!juegoHabilitado || carta.dataset.estado === 'abierta') return;            
+            carta.innerHTML = carta.dataset.valor;
+            carta.dataset.estado = 'abierta';            
+            // Verificar si todas las cartas están abiertas
+            var cartasAbiertas = document.querySelectorAll('.card[data-estado="abierta"]');
+            if (cartasAbiertas.length === 16) {
+                clearInterval(intervalo);
+                juegoHabilitado = false;
+                // Incrementar el contador en el almacenamiento local
+                var contadorVictorias = parseInt(localStorage.getItem('contadorVictorias')) || 0;
+                contadorVictorias++;
+                localStorage.setItem('contadorVictorias', contadorVictorias);                   
+                // Mostrar el contador en un mensaje de alerta
+                alert('¡Has ganado! ¡Todas las cartas han sido levantadas!... Total Victorias: ' + contadorVictorias );
+            }
+                }
+        </script>
+    </body>
+</html> 
