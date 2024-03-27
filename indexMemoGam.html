@@ -32,17 +32,20 @@
             var cronometro = document.getElementById('cronometro');
             var juegoHabilitado = false;
             var intervalo;
+            var datos = {cuentaJugadas: 0, cuentaVictorias: 0, cuentaDerrotas: 0}
+            var datosJson = JSON.stringify(datos)
+            var datos2 = JSON.parse(datosJson2)
             // Función para iniciar el juego
             function jugar() {
                 // Habilitar el juego
                 juegoHabilitado = true;
                 document.getElementById('jugarBtn').disabled = true;
                 // Incrementar el contador en el almacenamiento local
-                var contadorJugadas = parseInt(localStorage.getItem('contadorJugadas')) || 0;
-                contadorJugadas++;
-                localStorage.setItem('contadorJugadas', contadorJugadas);                  
+                cuentaJugadas = parseInt(localStorage.getItem('cuentaJugadas')) || 0;
+                cuentaJugadas++;
+                localStorage.setItem('contadorJugadas', cuentaJugadas);                  
                 // Mostrar el contador en un mensaje de alerta
-                alert('Has jugado ' + contadorJugadas + ' veces.');
+                console.log("Jugaste: " + cuentaJugadas + " veces");
                 // Barajar las cartas
                 cartas = cartas.concat(cartas).sort(function() { return 0.5 - Math.random() });        
                 // Mostrar las cartas en el tablero
@@ -65,11 +68,11 @@
                     if (juegoHabilitado) {
                         juegoHabilitado = false;
                         // Incrementar el contador en el almacenamiento local
-                        var contadorDerrotas = parseInt(localStorage.getItem('contadorDerrotas')) || 0;
-                        contadorDerrotas++;
-                        localStorage.setItem('contadorDerrotas', contadorDerrotas);                    
+                        cuentaDerrotas = parseInt(localStorage.getItem('cuentaDerrotas')) || 0;
+                        cuentaDerrotas++;
+                        localStorage.setItem('cuentaDerrotas', cuentaDerrotas);                    
                         // Mostrar el contador en un mensaje de alerta                    
-                        alert('¡Has perdido! Se acabó el tiempo. Perdiste: '  + contadorJugadas + ' veces.');
+                        console.log("Perdiste: " + cuentaDerrotas + " veces");
                     }   
                   }
               }, 1000);
@@ -85,11 +88,11 @@
                 clearInterval(intervalo);
                 juegoHabilitado = false;
                 // Incrementar el contador en el almacenamiento local
-                var contadorVictorias = parseInt(localStorage.getItem('contadorVictorias')) || 0;
-                contadorVictorias++;
-                localStorage.setItem('contadorVictorias', contadorVictorias);                   
+                cuentaVictorias = parseInt(localStorage.getItem('cuentaVictorias')) || 0;
+                cuentaVictorias++;
+                localStorage.setItem('cuentaVictorias', cuentaVictorias);                   
                 // Mostrar el contador en un mensaje de alerta
-                alert('¡Has ganado! ¡Todas las cartas han sido levantadas!... Total Victorias: ' + contadorVictorias );
+                console.log("Ganaste: " + cuentaVictorias + " veces");
             }
                 }
         </script>
