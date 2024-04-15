@@ -1,0 +1,14 @@
+#ranking {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#ranking th, #ranking td {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+#ranking tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
