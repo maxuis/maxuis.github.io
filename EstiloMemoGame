@@ -12,3 +12,13 @@
 #ranking tr:nth-child(even) {
   background-color: #f2f2f2;
 }
+
+/*
+element.style {
+  background-color: fuchsia;
+  float: left;
+  min-width: 80px;
+  position: absolute;
+  z-index: 99999999999;
+  }
+*/ 

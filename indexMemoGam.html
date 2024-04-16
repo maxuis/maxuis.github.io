@@ -18,6 +18,7 @@
                 line-height: 150px;
             }
         </style>
+        
     </head>
     <body>
         <table id="ranking">
@@ -45,6 +46,11 @@
             var cuentaVictorias = 0;
             var cuentaDerrotas = 0;
             var puntaje = 0;
+            var datosFromServer = [
+            { Player: "Juan", puntaje: 100 },
+            { Player: "María", puntaje: 90 },
+            { Player: "Max", puntaje: 80 }
+        ];
             var datos = [{"game": "MemoryGame", "player": NombreDelJugador, "eventType":"cuentaJugadas", "value": cuentaJugadas},
                         {"game": "MemoryGame", "player": NombreDelJugador, "eventType":"cuentaVictorias", "value": cuentaVictorias},
                         {"game": "MemoryGame", "player": NombreDelJugador, "eventType":"cuentaDerrotas", "value": cuentaDerrotas,},
@@ -67,12 +73,12 @@
                 }
             }
         
-            function cargarRanking() {
+            function actualizarRanking(datos) {
                 const tabla = document.getElementById("ranking");
-                const cuerpoTabla = tabla.getElementsByTagName("tbody")[0];        
+                const cuerpoTabla = tabla.getElementsByTagName("tbody")[0];
                 cuerpoTabla.innerHTML = ""; // Limpiar tabla
-        
-                datos.forEach((jugador, index) => {
+
+                    datos.forEach((jugador, index) => {
                     const fila = cuerpoTabla.insertRow();
                     const celdaNombre = fila.insertCell(0);
                     const celdaPuntaje = fila.insertCell(1);
@@ -186,7 +192,7 @@
                         jugador.cuentaDerrotas = cuentaDerrotas;
                     }
                 });
-                cargarRanking();
+                actualizarRanking(datosFromServer);
                 guardarDatos();
             }
         
@@ -227,7 +233,7 @@
             }
         
             cargarDatos();
-            cargarRanking();
+            actualizarRanking(datosFromServer);
         </script>
     </body>
 </html> 
