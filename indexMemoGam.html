@@ -17,132 +17,192 @@
                 text-align: center;
                 line-height: 150px;
             }
-        </style>
-        
+        </style>        
     </head>
     <body>
-        <table id="ranking">
-            <tr>
-                <th>Nombre</th>
-                <th>Puntaje</th>
-            </tr>            
+        <table id="ranking" border="1">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Puntaje</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Aquí se agregarán las filas dinámicamente con JavaScript -->
+            </tbody>
         </table>
         <center>
             <input type="text" id="nombreJugador" placeholder="Ingresa tu nombre de jugador">
-            <button onclick="guardarNombre()">Guardar nombre</button>
-            <button id="jugarBtn" onclick="jugar()">Jugar</button>
+            <button onclick="GuardarNombre()">Guardar nombre</button>
+            <button id="jugarBtn" onclick="EsperarConectarse()">Jugar</button>
             <div id="cronometro">Tiempo restante: </div>
             <div id="tablero"></div>
         </center>    
         
         <script>
+            ConectarWebSocket();
             var cartas = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
             var tablero = document.getElementById('tablero');
             var cronometro = document.getElementById('cronometro');
+            var direccionServidor = "wss://gamehubmanager.azurewebsites.net/ws";
+            // Crear una instancia de WebSocket con la dirección proporcionada
+            var socket = new WebSocket(direccionServidor);
             var juegoHabilitado = false;
-            var intervalo;
-            var NombreDelJugador = "";
-            var cuentaJugadas = 0;
-            var cuentaVictorias = 0;
-            var cuentaDerrotas = 0;
-            var puntaje = 0;
-            var datosFromServer = [
-            { Player: "Juan", puntaje: 100 },
-            { Player: "María", puntaje: 90 },
-            { Player: "Max", puntaje: 80 }
-        ];
-            var datos = [{"game": "MemoryGame", "player": NombreDelJugador, "eventType":"cuentaJugadas", "value": cuentaJugadas},
-                        {"game": "MemoryGame", "player": NombreDelJugador, "eventType":"cuentaVictorias", "value": cuentaVictorias},
-                        {"game": "MemoryGame", "player": NombreDelJugador, "eventType":"cuentaDerrotas", "value": cuentaDerrotas,},
-                        {"game": "MemoryGame", "player": NombreDelJugador, "eventType":"Puntaje", "value": puntaje}] 
-        
-            function guardarDatos() {
-                localStorage.setItem('datos', JSON.stringify(datos));
+            var intervalo;            
+            var NombreDelJugador = "Name Name";
+            var EnventoDeJuego = 1;
+            var CuentaJugadas = 0;
+            var CuentaVictorias = 0;
+            var CuentaDerrotas = 0;
+            var CantidadJugadores = 1;
+            var Puntaje = 110; 
+            var DatosJson = "";
+            var Datos = [{"game": "MemoryGame", "player": NombreDelJugador, "eventType":"JuegoMemoGame", "value": EnventoDeJuego},
+                        {"game": "MemoryGame", "player": NombreDelJugador, "eventType":"cuentaJugadas", "value": CuentaJugadas},
+                        {"game": "MemoryGame", "player": NombreDelJugador, "eventType":"cuentaVictorias", "value": CuentaVictorias},
+                        {"game": "MemoryGame", "player": NombreDelJugador, "eventType":"cuentaDerrotas", "value": CuentaDerrotas,}, 
+                        {"game": "MemoryGame", "player": NombreDelJugador, "eventType": "NuevoJugador", "value": CantidadJugadores},
+                        {"game": "MemoryGame", "player": NombreDelJugador, "eventType":"Puntaje", "value": Puntaje}];        
+            function GuardarDatos() {
+                // Convertir el objeto "Datos" a una cadena JSON
+                DatosJson = JSON.stringify(Datos);    
+                // Guardar la cadena JSON en el almacenamiento local con la clave "Datos"
+                localStorage.setItem('Datos', DatosJson);
             }
-        
-            function cargarDatos() {
-                const datosGuardados = localStorage.getItem('datos');
-                if (datosGuardados) {
-                    datos = JSON.parse(datosGuardados);
-                } else {
-                    datos = [
-                        { Player: "Jugador1", cuentaJugadas: 0, cuentaVictorias: 0, cuentaDerrotas: 0, puntaje: 0 },
-                        { Player: "Jugador2", cuentaJugadas: 0, cuentaVictorias: 0, cuentaDerrotas: 0, puntaje: 0 },
-                        { Player: "Jugador3", cuentaJugadas: 0, cuentaVictorias: 0, cuentaDerrotas: 0, puntaje: 0 }
-                    ];
+            function CargarDatos() {
+                // Obtener la cadena JSON del almacenamiento local con la clave "Datos"
+                var DatosJson = localStorage.getItem('Datos');
+                // Convertir la cadena JSON de vuelta a un objeto
+                Datos = JSON.parse(DatosJson);
+            }        
+            function GuardarNombre(){
+                // Obtener el valor del input y asignarlo a la variable NombreDelJugador
+                NombreDelJugador = document.getElementById('nombreJugador').value;
+                    // Iterar sobre cada objeto en el array Datos y asignar el valor de NombreDelJugador a la propiedad "player"
+                    for (var i = 0; i < Datos.length; i++) {
+                    Datos[i].player = NombreDelJugador;
                 }
             }
-            // Crea una nueva conexión WebSocket
-            const socket = new WebSocket("wss://socketsbay.com/wss/v2/1/demo/");
+            function GuardarValoresNumericos(){
+                // Obtener el valor de las variables y asignarlo al objeto Datos
+                Datos[0].value = CuentaJugadas;
+                Datos[1].value = CuentaVictorias;
+                Datos[2].value = CuentaDerrotas;
+                Datos[3].value = Puntaje;
+            } 
+            function EsperarConectarse(){
+                if (socket.readyState === WebSocket.OPEN){
+                    jugar(); // jugar si esta conctado
+                }else{
+                    console.log("No es posible conectarse");
+                    setTimeout(EsperarConectarse, 1000); // volver a llamar cada 1 segundo
+                }
+            }
+            function ReglasDePuntajes(){
+                // Condicionar las reglas para ganar puntaje
+                Puntaje = Puntaje + (CuentaJugadas + CuentaVictorias) - CuentaDerrotas;
+            }
+            // Función para agregar un nuevo puntaje al ranking
+            function agregarAlRanking(nombreJugador, puntaje) {
+                // Crear una nueva fila en la tabla del ranking
+                var fila = document.createElement("tr");
+                var celdaNombre = document.createElement("td");
+                var celdaPuntaje = document.createElement("td");
+                celdaNombre.textContent = nombreJugador;
+                celdaPuntaje.textContent = puntaje;
+                fila.appendChild(celdaNombre);
+                fila.appendChild(celdaPuntaje);
+                // Agregar la fila a la tabla del ranking
+                var ranking = document.getElementById("ranking");
+                ranking.appendChild(fila);
+            }
+            function mostrarRanking() {
+                // Filtrar los datos para obtener solo los eventos de tipo "Puntaje"
+                var puntajes = Datos.filter(function(dato) {
+                    return dato.eventType === "Puntaje";
+                });
+                // Ordenar los puntajes de mayor a menor
+                puntajes.sort(function(a, b) {
+                    return b.value - a.value;
+                });
+                // Mostrar el ranking en tu interfaz
+                var ranking = document.getElementById("ranking");
+                ranking.innerHTML = "<tr><th>Nombre</th><th>Puntaje</th></tr>";
+                puntajes.forEach(function(puntaje) {
+                    var fila = document.createElement("tr");
+                    var celdaNombre = document.createElement("td");
+                    var celdaPuntaje = document.createElement("td");
 
-            // Escucha por mensajes del servidor WebSocket
-            socket.addEventListener("message", function (event) {
-            const rankingActualizado = JSON.parse(event.data);
-            actualizarRanking(rankingActualizado);
-            });
-        
-            function actualizarRanking(datos) {
-                const tabla = document.getElementById("ranking");
-                const cuerpoTabla = tabla.getElementsByTagName("tbody")[0];
-                cuerpoTabla.innerHTML = ""; // Limpiar tabla
+                    celdaNombre.textContent = puntaje.player;
+                    celdaPuntaje.textContent = puntaje.value;
 
-                    datos.forEach((jugador, index) => {
-                    const fila = cuerpoTabla.insertRow();
-                    const celdaNombre = fila.insertCell(0);
-                    const celdaPuntaje = fila.insertCell(1);
-                    celdaNombre.textContent = jugador.Player;
-                    celdaPuntaje.textContent = jugador.puntaje;
+                    fila.appendChild(celdaNombre);
+                    fila.appendChild(celdaPuntaje);
+                    ranking.appendChild(fila);
                 });
             }
-        
-            function guardarNombre() {
-                const nombre = document.getElementById("nombreJugador").value;
-                localStorage.setItem('nombreJugador', nombre);   
-                NombreDelJugador = nombre; 
-                for (var i = 0; i < datos.length; i++) {
-                        if (datos[i].eventType === "player") {
-                        datos[i].value = NombreDelJugador;
-                        break;
-                    }
-                }
-                location.reload();
+            function ConectarWebSocket() {                                
+                if (direccionServidor) { // Verificar si el usuario ingresó una dirección                    
+                    // Evento que se activa cuando la conexión se establece con éxito
+                    socket.onopen = function(event) {
+                    console.log("Conexión establecida con el servidor WebSocket en: " + direccionServidor);                    
+                    };                    
+                    // Evento que se activa cuando se produce un error en la conexión
+                    socket.onerror = function(event) {
+                    console.error("Error en la conexión con el servidor WebSocket:", event);                    
+                    };                                                                     
+                }            
             }
-        
-            document.addEventListener("DOMContentLoaded", function() {
-                const nombreGuardado = localStorage.getItem("nombreJugador");
-                if (nombreGuardado) {
-                    document.getElementById("nombreJugador").value = nombreGuardado;
+            function CerrarConexion() {
+                // Verificar si la conexión es verdadera
+                if (socket.readyState === WebSocket.OPEN) {
+                    // Establecer un temporizador para cerrar la conexión después de 10 segundos
+                    setTimeout(function() {
+                        // Cerrar la conexión
+                        socket.close();
+                        console.log("Conexión cerrada después de 10 segundos.");
+                    }, 15000); // 10 segundos en milisegundos
                 }
-            });
-        
+            }
+            function RecibirMensajes(){
+                if (socket.readyState === WebSocket.OPEN) {
+                    // Evento que se activa cuando se recibe un mensaje del servidor
+                    socket.onmessage = function(event) {
+                        // Verificar si la conexión está abierta
+                        console.log("Mensaje recibido del servidor:", event.data);
+                        // Convertir el mensaje recibido (cadena JSON) de nuevo a un objeto
+                        Datos = JSON.parse(event.data);
+                        // Ahora puedes utilizar el objeto "datosRecibidos" como desees
+                        console.log("Datos recibidos del servidor:", datosRecibidos);
+                        // Verificar si el mensaje contiene información sobre un nuevo puntaje
+                        if (mensaje.eventType === "NuevoJugador") {
+                            // Agregar el nuevo puntaje al ranking
+                            agregarAlRanking(mensaje.player, mensaje.value);
+                        }
+                    }
+                } else {
+                    console.error("La conexión con el servidor WebSocket no está abierta.");
+                }                 
+            }
+            // Función para enviar un mensaje al servidor
+            function EnviarMensaje(mensaje) {
+                socket.send(mensaje);      
+            }
+            // Llamar a la función para mostrar el ranking cada 0.5 segundo
+            setInterval(mostrarRanking, 500); // 500 milisegundos = 0.5 segundo
             // Función para iniciar el juego
             function jugar() {
-                // Habilitar el juego
+                // Habilitar el juego                                
+                mostrarRanking();
+                agregarAlRanking();
+                GuardarDatos(); // Guardar datos en localStorage                
+                EnviarMensaje(DatosJson); // Enviar los datos.Json al servidor
                 juegoHabilitado = true;
-                document.getElementById('jugarBtn').disabled = true;
-                // Incrementar el contador en el almacenamiento local
-                cuentaJugadas = parseInt(localStorage.getItem('cuentaJugadas')) || 0;
-                cuentaJugadas++;
-                puntaje = parseInt(localStorage.getItem('puntaje')) || 0;                
-                puntaje = puntaje + (cuentaJugadas + cuentaVictorias) - cuentaDerrotas;
-                localStorage.setItem('puntaje', puntaje)
-                localStorage.setItem('contadorJugadas', cuentaJugadas);              
-                // Actualizar el valor de "cuentaJugadas" en el arreglo de datos
-                for (var i = 0; i < datos.length; i++) {
-                    if (datos[i].eventType === "cuentaJugadas") {
-                    datos[i].value = cuentaJugadas;
-                    break; // Termina el bucle una vez que se actualiza el valor
-                    }
-                }
-                // Actualizar el valor de "puntaje" en el arreglo de datos
-                for (var i = 0; i < datos.length; i++) {
-                    if (datos[i].eventType === "Puntaje") {
-                    datos[i].value = puntaje;
-                    break; // Termina el bucle una vez que se actualiza el valor
-                    }
-                }
-                // Mostrar el contador en un mensaje de alerta
-                console.log("Jugaste: " + cuentaJugadas + " veces y tu Puntaje es:" + puntaje);
+                document.getElementById('jugarBtn').disabled = true;               
+                CuentaJugadas++; // Sumar a la cuenta jugadas 1 punto
+                ReglasDePuntajes(); // Llamar a la asignación de puntaje
+                GuardarValoresNumericos(); // Guardar los valores                
+                RecibirMensajes(); // Recibir los datos.json y convertirlos a Datos
                 // Barajar las cartas
                 cartas = cartas.concat(cartas).sort(function() { return 0.5 - Math.random() });        
                 // Mostrar las cartas en el tablero
@@ -163,47 +223,17 @@
                     if (segundosRestantes < 0) {
                         clearInterval(intervalo);
                         if (juegoHabilitado) {
-                            juegoHabilitado = false;
-                            // Incrementar el contador en el almacenamiento local
-                            cuentaDerrotas = parseInt(localStorage.getItem('cuentaDerrotas')) || 0;
-                            cuentaDerrotas++;
-                            puntaje = parseInt(localStorage.getItem('puntaje')) || 0;                
-                            puntaje = puntaje + (cuentaJugadas + cuentaVictorias) - cuentaDerrotas;
-                            localStorage.setItem('puntaje', puntaje)
-                            localStorage.setItem('cuentaDerrotas', cuentaDerrotas);   
-                            // Actualizar el valor de "cuentaJugadas" en el arreglo de datos
-                            for (var i = 0; i < datos.length; i++) {
-                                if (datos[i].eventType === "cuentaDerrotas") {
-                                datos[i].value = cuentaDerrotas;
-                                break; // Termina el bucle una vez que se actualiza el valor
-                                }
-                            }
-                            // Actualizar el valor de "puntaje" en el arreglo de datos
-                            for (var i = 0; i < datos.length; i++) {
-                                if (datos[i].eventType === "Puntaje") {
-                                datos[i].value = puntaje;
-                                break; // Termina el bucle una vez que se actualiza el valor
-                                }
-                            }                 
-                            // Mostrar el contador en un mensaje de alerta                    
-                            console.log("Perdiste: " + cuentaDerrotas + " veces y tu Puntaje es: " + puntaje);
+                            juegoHabilitado = false;                            
+                            CuentaDerrotas++; // Sumar al cuenta derrotas
+                            ReglasDePuntajes(); // Llamar a la asignación de puntaje
+                            GuardarValoresNumericos(); // Guardar los valores 
+                            GuardarDatos(); // Guardar datos en localStorage                                                        
+                            EnviarMensaje(DatosJson); // Enviar los datos.Json al servidor   
+                            RecibirMensajes(); // Recibir los datos.json y convertirlos a Datos                            
                         }   
                     }
-                }, 1000);
-        
-                // Actualizar el ranking
-                datos.forEach((jugador, index) => {
-                    if (jugador.Player === NombreDelJugador) {
-                        jugador.puntaje = puntaje;
-                        jugador.cuentaJugadas = cuentaJugadas;
-                        jugador.cuentaVictorias = cuentaVictorias;
-                        jugador.cuentaDerrotas = cuentaDerrotas;
-                    }
-                });
-                actualizarRanking(datosFromServer);
-                guardarDatos();
-            }
-        
+                }, 1000);        
+            }        
             // Función para mostrar una carta
             function mostrarCarta(carta) {
                 if (!juegoHabilitado || carta.dataset.estado === 'abierta') return;            
@@ -214,34 +244,15 @@
                 if (cartasAbiertas.length === 16) {
                     clearInterval(intervalo);
                     juegoHabilitado = false;
-                    // Incrementar el contador en el almacenamiento local
-                    cuentaVictorias = parseInt(localStorage.getItem('cuentaVictorias')) || 0;
-                    cuentaVictorias++;
-                    puntaje = parseInt(localStorage.getItem('puntaje')) || 0;                
-                    puntaje = puntaje + (cuentaJugadas + cuentaVictorias) - cuentaDerrotas;
-                    localStorage.setItem('puntaje', puntaje)
-                    localStorage.setItem('cuentaVictorias', cuentaVictorias);
-                    // Actualizar el valor de "cuentaJugadas" en el arreglo de datos
-                for (var i = 0; i < datos.length; i++) {
-                    if (datos[i].eventType === "cuentaVictorias") {
-                    datos[i].value = cuentaVictorias;
-                    break; // Termina el bucle una vez que se actualiza el valor
-                    }
+                    CuentaVictorias++; // Sumar al cuenta victorias
+                    ReglasDePuntajes(); // Llamar a la asignación de puntaje
+                    GuardarValoresNumericos(); // Guardar los valores 
+                    GuardarDatos(); // Guardar datos en localStorage                                        
+                    EnviarMensaje(DatosJson); // Enviar los datos.Json al servidor                    
+                    RecibirMensajes(); // Recibir los datos.json y convertirlos a Datos                    
                 }
-                // Actualizar el valor de "puntaje" en el arreglo de datos
-                for (var i = 0; i < datos.length; i++) {
-                    if (datos[i].eventType === "Puntaje") {
-                    datos[i].value = puntaje;
-                    break; // Termina el bucle una vez que se actualiza el valor
-                    }
-                }
-                    // Mostrar el contador en un mensaje de alerta
-                    console.log("Ganaste: " + cuentaVictorias + " veces y tu Puntaje es: " + puntaje);
-                }
-            }
-        
-            cargarDatos();
-            actualizarRanking(datosFromServer);
+            }   
+            CerrarConexion();  
         </script>
     </body>
 </html> 

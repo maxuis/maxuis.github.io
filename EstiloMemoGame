@@ -12,7 +12,16 @@
 #ranking tr:nth-child(even) {
   background-color: #f2f2f2;
 }
-
+/* Estilos para dispositivos móviles */
+@media screen and (max-width: 600px) {
+  table {
+      width: 100%;
+  }
+  th, td {
+      display: block;
+      width: 100%;
+  }
+}
 /*
 element.style {
   background-color: fuchsia;
