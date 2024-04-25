@@ -83,6 +83,7 @@
                     Datos[i].player = NombreDelJugador;
                 }
             }
+<<<<<<< HEAD
             function GuardarValoresNumericos(){
                 // Obtener el valor de las variables y asignarlo al objeto Datos
                 Datos[0].value = CuentaJugadas;
@@ -132,6 +133,10 @@
                     var fila = document.createElement("tr");
                     var celdaNombre = document.createElement("td");
                     var celdaPuntaje = document.createElement("td");
+=======
+            // Crea una nueva conexión WebSocket
+            const socket = new WebSocket("wss://gamehubmanager.azurewebsites.net/ws");
+>>>>>>> 802e02ff3f744056b28a677c731db397c3e536ec
 
                     celdaNombre.textContent = puntaje.player;
                     celdaPuntaje.textContent = puntaje.value;
