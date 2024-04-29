@@ -55,7 +55,7 @@
             var CuentaVictorias = 0;
             var CuentaDerrotas = 0;
             var CantidadJugadores = 1;
-            var Puntaje = 110; 
+            var Puntaje = 0; 
             var DatosJson = "";
             var Datos = [{"game": "MemoryGame", "player": NombreDelJugador, "eventType":"JuegoMemoGame", "value": EnventoDeJuego},
                         {"game": "MemoryGame", "player": NombreDelJugador, "eventType":"cuentaJugadas", "value": CuentaJugadas},
@@ -77,13 +77,17 @@
             }        
             function GuardarNombre(){
                 // Obtener el valor del input y asignarlo a la variable NombreDelJugador
-                NombreDelJugador = document.getElementById('nombreJugador').value;
-                    // Iterar sobre cada objeto en el array Datos y asignar el valor de NombreDelJugador a la propiedad "player"
-                    for (var i = 0; i < Datos.length; i++) {
+            NombreDelJugador = document.getElementById('nombreJugador').value.trim();
+            if (NombreDelJugador !== "") {
+                // Iterar sobre cada objeto en el array Datos y asignar el valor de NombreDelJugador a la propiedad "player"
+                for (var i = 0; i < Datos.length; i++) {
                     Datos[i].player = NombreDelJugador;
                 }
+                GuardarDatos(); // Guardar los datos actualizados en el almacenamiento local
+            } else {
+                alert("Por favor, ingresa un nombre válido.");
             }
-<<<<<<< HEAD
+            }
             function GuardarValoresNumericos(){
                 // Obtener el valor de las variables y asignarlo al objeto Datos
                 Datos[0].value = CuentaJugadas;
@@ -133,10 +137,6 @@
                     var fila = document.createElement("tr");
                     var celdaNombre = document.createElement("td");
                     var celdaPuntaje = document.createElement("td");
-=======
-            // Crea una nueva conexión WebSocket
-            const socket = new WebSocket("wss://gamehubmanager.azurewebsites.net/ws");
->>>>>>> 802e02ff3f744056b28a677c731db397c3e536ec
 
                     celdaNombre.textContent = puntaje.player;
                     celdaPuntaje.textContent = puntaje.value;
@@ -165,8 +165,8 @@
                     setTimeout(function() {
                         // Cerrar la conexión
                         socket.close();
-                        console.log("Conexión cerrada después de 10 segundos.");
-                    }, 15000); // 10 segundos en milisegundos
+                        console.log("Conexión cerrada después de 30 segundos.");
+                    }, 30000); // 10 segundos en milisegundos
                 }
             }
             function RecibirMensajes(){
@@ -207,7 +207,7 @@
                 CuentaJugadas++; // Sumar a la cuenta jugadas 1 punto
                 ReglasDePuntajes(); // Llamar a la asignación de puntaje
                 GuardarValoresNumericos(); // Guardar los valores                
-                RecibirMensajes(); // Recibir los datos.json y convertirlos a Datos
+                RecibirMensajes(); // Recibir los datos.json y convertirlos a Datos                
                 // Barajar las cartas
                 cartas = cartas.concat(cartas).sort(function() { return 0.5 - Math.random() });        
                 // Mostrar las cartas en el tablero
@@ -254,10 +254,15 @@
                     GuardarValoresNumericos(); // Guardar los valores 
                     GuardarDatos(); // Guardar datos en localStorage                                        
                     EnviarMensaje(DatosJson); // Enviar los datos.Json al servidor                    
-                    RecibirMensajes(); // Recibir los datos.json y convertirlos a Datos                    
+                    RecibirMensajes(); // Recibir los datos.json y convertirlos a Datos                                     
                 }
-            }   
-            CerrarConexion();  
+            }
+            setTimeout(function() {
+                if (socket.readyState === WebSocket.OPEN) {
+                    CerrarConexion();
+                }                
+            }, 20000);
+            
         </script>
     </body>
 </html> 
