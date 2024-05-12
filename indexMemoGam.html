@@ -2,15 +2,15 @@
 <html lang="es-es">
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">   
-         <link href="manifest.json">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">           
         <link rel="stylesheet" type="text/css" href="EstiloMemoGame">     
         <title>Juego de Memoria</title>
+        <link href="manifest.json">
         <style>
             .card {
                 width: 100px;
                 height: 150px;
-                background-color: #CCC;
+                background-color: #ff0000;
                 border: 1px solid #000;
                 margin: 10px;
                 display: inline-block;
@@ -41,13 +41,13 @@
         </center>    
         
         <script>
-            ConectarWebSocket();
-            var cartas = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
-            var tablero = document.getElementById('tablero');
-            var cronometro = document.getElementById('cronometro');
             var direccionServidor = "wss://gamehubmanager.azurewebsites.net/ws";
             // Crear una instancia de WebSocket con la dirección proporcionada
             var socket = new WebSocket(direccionServidor);
+            ConectarWebSocket();
+            var cartas = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+            var tablero = document.getElementById('tablero');
+            var cronometro = document.getElementById('cronometro');            
             var juegoHabilitado = false;
             var intervalo;            
             var NombreDelJugador = "Name Name";
@@ -158,18 +158,7 @@
                     console.error("Error en la conexión con el servidor WebSocket:", event);                    
                     };                                                                     
                 }            
-            }
-            function CerrarConexion() {
-                // Verificar si la conexión es verdadera
-                if (socket.readyState === WebSocket.OPEN) {
-                    // Establecer un temporizador para cerrar la conexión después de 10 segundos
-                    setTimeout(function() {
-                        // Cerrar la conexión
-                        socket.close();
-                        console.log("Conexión cerrada después de 30 segundos.");
-                    }, 30000); // 10 segundos en milisegundos
-                }
-            }
+            }            
             function RecibirMensajes(){
                 if (socket.readyState === WebSocket.OPEN) {
                     // Evento que se activa cuando se recibe un mensaje del servidor
@@ -257,13 +246,7 @@
                     EnviarMensaje(DatosJson); // Enviar los datos.Json al servidor                    
                     RecibirMensajes(); // Recibir los datos.json y convertirlos a Datos                                     
                 }
-            }
-            setTimeout(function() {
-                if (socket.readyState === WebSocket.OPEN) {
-                    CerrarConexion();
-                }                
-            }, 20000);
-            
+            }            
         </script>
     </body>
 </html> 
