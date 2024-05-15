@@ -90,6 +90,7 @@
                 if (socket.readyState === WebSocket.OPEN){
                     jugar(); // jugar si esta conctado
                 }else{
+                    alert("NO pudimos conectarnos, entramos en <<< MODO OFF LINE >>>");
                     jugar(); // Jugar modo Off Line
                 }
             }
