@@ -39,7 +39,7 @@
             <input type="text" id="nombreJugador" placeholder="Ingresa tu nombre de jugador">
             <button onclick="GuardarNombre()">Guardar nombre</button>
             <button id="jugarBtn" onclick="EsperarConectarse()">Jugar</button>
-            <button id="jugarBtn" onclick="jugar()">Jugar OffLine</button>
+            <button id="jugarBtn" onclick="jugar()">Jugar Off Line</button>
             <div id="cronometro">Tiempo restante: </div>
             <div id="tablero"></div>
         </center>    
@@ -88,13 +88,6 @@
                 alert("Por favor, ingresa un nombre válido.");
             }
             }
-            function GuardarValoresNumericos(){
-                // Obtener el valor de las variables y asignarlo al objeto Datos
-                Datos[0].value = CuentaJugadas;
-                Datos[1].value = CuentaVictorias;
-                Datos[2].value = CuentaDerrotas;
-                Datos[3].value = Puntaje;
-            } 
             function EsperarConectarse(){
                 if (socket.readyState === WebSocket.OPEN){
                     jugar(); // jugar si esta conctado
@@ -180,16 +173,15 @@
             setInterval(mostrarRanking, 500); // 500 milisegundos = 0.5 segundo
             // Función para iniciar el juego
             function jugar() {
-                // Habilitar el juego                                
+                // Habilitar el juego
                 mostrarRanking();
                 agregarAlRanking();
-                GuardarDatos(); // Guardar datos en localStorage                
+                GuardarDatos(); // Guardar datos en localStorage
                 EnviarMensaje(DatosJson); // Enviar los datos.Json al servidor
                 juegoHabilitado = true;
                 document.getElementById('jugarBtn').disabled = true;               
                 CuentaJugadas++; // Sumar a la cuenta jugadas 1 punto
-                ReglasDePuntajes(); // Llamar a la asignación de puntaje
-                GuardarValoresNumericos(); // Guardar los valores                
+                ReglasDePuntajes(); // Llamar a la asignación de puntaje                       
                 RecibirMensajes(); // Recibir los datos.json y convertirlos a Datos                
                 // Barajar las cartas
                 cartas = cartas.concat(cartas).sort(function() { return 0.5 - Math.random() });        
@@ -211,20 +203,19 @@
                     if (segundosRestantes < 0) {
                         clearInterval(intervalo);
                         if (juegoHabilitado) {
-                            juegoHabilitado = false;                            
+                            juegoHabilitado = false;
                             CuentaDerrotas++; // Sumar al cuenta derrotas
                             ReglasDePuntajes(); // Llamar a la asignación de puntaje
-                            GuardarValoresNumericos(); // Guardar los valores 
-                            GuardarDatos(); // Guardar datos en localStorage                                                        
-                            EnviarMensaje(DatosJson); // Enviar los datos.Json al servidor   
-                            RecibirMensajes(); // Recibir los datos.json y convertirlos a Datos                            
+                            GuardarDatos(); // Guardar datos en localStorage
+                            EnviarMensaje(DatosJson); // Enviar los datos.Json al servidor
+                            RecibirMensajes(); // Recibir los datos.json y convertirlos a Datos
                         }   
                     }
                 }, 1000);        
             }        
             // Función para mostrar una carta
             function mostrarCarta(carta) {
-                if (!juegoHabilitado || carta.dataset.estado === 'abierta') return;            
+                if (!juegoHabilitado || carta.dataset.estado === 'abierta') return;
                 carta.innerHTML = carta.dataset.valor;
                 carta.dataset.estado = 'abierta';            
                 // Verificar si todas las cartas están abiertas
@@ -234,12 +225,11 @@
                     juegoHabilitado = false;
                     CuentaVictorias++; // Sumar al cuenta victorias
                     ReglasDePuntajes(); // Llamar a la asignación de puntaje
-                    GuardarValoresNumericos(); // Guardar los valores 
-                    GuardarDatos(); // Guardar datos en localStorage                                        
-                    EnviarMensaje(DatosJson); // Enviar los datos.Json al servidor                    
-                    RecibirMensajes(); // Recibir los datos.json y convertirlos a Datos                                     
+                    GuardarDatos(); // Guardar datos en localStorage
+                    EnviarMensaje(DatosJson); // Enviar los datos.Json al servidor
+                    RecibirMensajes(); // Recibir los datos.json y convertirlos a Datos
                 }
-            }            
+            }
         </script>
     </body>
 </html> 
