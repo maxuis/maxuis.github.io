@@ -38,8 +38,7 @@
         <center>
             <input type="text" id="nombreJugador" placeholder="Ingresa tu nombre de jugador">
             <button onclick="GuardarNombre()">Guardar nombre</button>
-            <button id="jugarBtn" onclick="EsperarConectarse()">Jugar</button>
-            <button id="jugarBtn" onclick="jugar()">Jugar Off Line</button>
+            <button id="jugarBtn" onclick="EsperarConectarse()">Jugar</button>    
             <div id="cronometro">Tiempo restante: </div>
             <div id="tablero"></div>
         </center>
@@ -91,8 +90,7 @@
                 if (socket.readyState === WebSocket.OPEN){
                     jugar(); // jugar si esta conctado
                 }else{
-                    console.log("No es posible conectarse");
-                    setTimeout(EsperarConectarse, 1000); // volver a llamar cada 1 segundo
+                    jugar(); // Jugar modo Off Line
                 }
             }
             function ReglasDePuntajes(){
