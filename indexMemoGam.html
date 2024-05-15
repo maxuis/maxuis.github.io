@@ -42,8 +42,7 @@
             <button id="jugarBtn" onclick="jugar()">Jugar Off Line</button>
             <div id="cronometro">Tiempo restante: </div>
             <div id="tablero"></div>
-        </center>    
-        
+        </center>
         <script>
             var direccionServidor = "wss://gamehubmanager.azurewebsites.net/ws";
             // Crear una instancia de WebSocket con la dirección proporcionada
@@ -230,6 +229,32 @@
                     RecibirMensajes(); // Recibir los datos.json y convertirlos a Datos
                 }
             }
+        </script>
+        <script>
+            // Obtener el manifiesto de la PWA
+            fetch('/manifest.json')
+              .then(response => response.json())
+              .then(manifest => {
+                // Obtener el color de fondo del manifiesto
+                const backgroundColor = manifest.background_color;
+                // Establecer el color de fondo de la página HTML
+                document.body.style.backgroundColor = backgroundColor;
+              })
+              .catch(error => console.error('Error al obtener el manifiesto:', error));
+        </script>
+        <script>
+        // Obtener el manifiesto de la PWA
+        fetch('/manifest.json')
+          .then(response => response.json())
+          .then(manifest => {
+            // Obtener el color de fondo y el tema del manifiesto
+            const backgroundColor = manifest.background_color;
+            const themeColor = manifest.theme_color;
+            // Establecer el color de fondo y el tema de la página HTML
+            document.body.style.backgroundColor = backgroundColor;
+            document.querySelector('meta[name="theme-color"]').setAttribute('content', themeColor);
+          })
+          .catch(error => console.error('Error al obtener el manifiesto:', error));
         </script>
     </body>
 </html> 
