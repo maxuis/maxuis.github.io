@@ -61,12 +61,7 @@
             var CantidadJugadores = 1;
             var Puntaje = 0; 
             var DatosJson = "";
-            var Datos = [{"game": "MemoryGame", "player": NombreDelJugador, "eventType":"JuegoMemoGame", "value": EnventoDeJuego},
-                        {"game": "MemoryGame", "player": NombreDelJugador, "eventType":"cuentaJugadas", "value": CuentaJugadas},
-                        {"game": "MemoryGame", "player": NombreDelJugador, "eventType":"cuentaVictorias", "value": CuentaVictorias},
-                        {"game": "MemoryGame", "player": NombreDelJugador, "eventType":"cuentaDerrotas", "value": CuentaDerrotas,}, 
-                        {"game": "MemoryGame", "player": NombreDelJugador, "eventType": "NuevoJugador", "value": CantidadJugadores},
-                        {"game": "MemoryGame", "player": NombreDelJugador, "eventType":"Puntaje", "value": Puntaje}];        
+            var Datos = {"game": "MemoryGame", "player": NombreDelJugador, "eventType":"Puntaje", "value": Puntaje};        
             function GuardarDatos() {
                 // Convertir el objeto "Datos" a una cadena JSON
                 DatosJson = JSON.stringify(Datos);    
