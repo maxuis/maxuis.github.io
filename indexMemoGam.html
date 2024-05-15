@@ -122,29 +122,23 @@
                 ranking.appendChild(fila);
             }
             function mostrarRanking() {
-                // Filtrar los datos para obtener solo los eventos de tipo "Puntaje"
-                var puntajes = Datos.filter(function(dato) {
-                    return dato.eventType === "Puntaje";
-                });
-                // Ordenar los puntajes de mayor a menor
-                puntajes.sort(function(a, b) {
-                    return b.value - a.value;
-                });
-                // Mostrar el ranking en tu interfaz
+            // Verificar si el eventType es "Puntaje"
+            if (Datos.eventType === "Puntaje") {
                 var ranking = document.getElementById("ranking");
                 ranking.innerHTML = "<tr><th>Nombre</th><th>Puntaje</th></tr>";
-                puntajes.forEach(function(puntaje) {
-                    var fila = document.createElement("tr");
-                    var celdaNombre = document.createElement("td");
-                    var celdaPuntaje = document.createElement("td");
+        
+                // Mostrar el nombre del jugador y su puntaje
+                var fila = document.createElement("tr");
+                var celdaNombre = document.createElement("td");
+                var celdaPuntaje = document.createElement("td");
 
-                    celdaNombre.textContent = puntaje.player;
-                    celdaPuntaje.textContent = puntaje.value;
-
-                    fila.appendChild(celdaNombre);
-                    fila.appendChild(celdaPuntaje);
-                    ranking.appendChild(fila);
-                });
+                celdaNombre.textContent = Datos.player;
+                celdaPuntaje.textContent = Datos.value;
+        
+                fila.appendChild(celdaNombre);
+                fila.appendChild(celdaPuntaje);
+                ranking.appendChild(fila);
+                }
             }
             function ConectarWebSocket() {                                
                 if (direccionServidor) { // Verificar si el usuario ingresó una dirección                    
