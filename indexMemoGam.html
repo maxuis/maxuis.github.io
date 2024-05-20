@@ -254,6 +254,8 @@
                             GuardarDatos(); // Guardar datos en localStorage
                             EnviarMensaje(DatosJson); // Enviar los datos.Json al servidor
                             RecibirMensajes(); // Recibir los datos.json y convertirlos a Datos
+                            alert("¡¡ PERDISTE !!");
+                            socket.close();                            
                         }   
                     }
                 }, 1000);        
@@ -273,8 +275,10 @@
                     GuardarDatos(); // Guardar datos en localStorage
                     EnviarMensaje(DatosJson); // Enviar los datos.Json al servidor
                     RecibirMensajes(); // Recibir los datos.json y convertirlos a Datos
+                    alert("¡¡ GANASTE !!");                    
+                    socket.close();
                 }
-            }
+            }        
         </script>
         <script>
             // Obtener el manifiesto de la PWA
