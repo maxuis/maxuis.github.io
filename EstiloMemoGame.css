@@ -12,6 +12,9 @@
 #ranking tr:nth-child(even) {
   background-color: #f2f2f2;
 }
+body{
+  background-color: black;
+}
 /* Estilos para dispositivos móviles */
 @media screen and (max-width: 600px) {
   table {
