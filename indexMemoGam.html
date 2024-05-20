@@ -47,9 +47,9 @@
         </center>
         <script>
             var direccionServidor = "wss://gamehubmanager.azurewebsites.net/ws";
-            // Crear una instancia de WebSocket con la dirección proporcionada
-            var socket = new WebSocket(direccionServidor);
-            ConectarWebSocket();
+            // Crear una instancia de WebSocket con la dirección proporcionada            
+            const msg = "Hello, WebSocket!";
+            ConectarWebSocket(direccionServidor, msg);
             var cartas = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
             var tablero = document.getElementById('tablero');
             var cronometro = document.getElementById('cronometro');            
@@ -134,18 +134,62 @@
                 ranking.appendChild(fila);
                 }
             }
-            function ConectarWebSocket() {                                
-                if (direccionServidor) { // Verificar si el usuario ingresó una dirección                    
-                    // Evento que se activa cuando la conexión se establece con éxito
-                    socket.onopen = function(event) {
-                    console.log("Conexión establecida con el servidor WebSocket en: " + direccionServidor);                    
-                    };                    
-                    // Evento que se activa cuando se produce un error en la conexión
-                    socket.onerror = function(event) {
-                    console.error("Error en la conexión con el servidor WebSocket:", event);                    
-                    };                                                                     
-                }            
-            }            
+            function ConectarWebSocket(direccionServidor, msg) {
+                if (!direccionServidor) {
+                    console.error("No se ha proporcionado una dirección del servidor WebSocket.");
+                    return;
+                }
+            
+                if (!navigator.onLine) {
+                    console.error("No hay conexión a Internet. No se puede conectar al WebSocket.");
+                    return;
+                }
+            
+                let socket = new WebSocket(direccionServidor);
+            
+                // Evento que se activa cuando la conexión se establece con éxito
+                socket.onopen = function(event) {
+                    console.log("Conexión establecida con el servidor WebSocket en: " + direccionServidor);
+                    try {
+                        socket.send(msg); // Enviar el mensaje una vez la conexión está abierta
+                    } catch (e) {
+                        console.error("Error al enviar el mensaje:", e);
+                    }
+                };
+            
+                // Evento que se activa cuando se produce un error en la conexión
+                socket.onerror = function(event) {
+                    console.error("Error en la conexión con el servidor WebSocket:", event);
+                };
+            
+                // Evento que se activa cuando se cierra la conexión
+                socket.onclose = function(event) {
+                    console.log("Conexión cerrada:", event);
+                    // Intentar reconectar después de 5 segundos si hay conexión a Internet
+                    if (navigator.onLine) {
+                        setTimeout(() => ConectarWebSocket(direccionServidor, msg), 5000);
+                    }
+                };
+            
+                // Evento que se activa cuando se recibe un mensaje del servidor
+                socket.onmessage = function(event) {
+                    console.log("Mensaje recibido del servidor:", event.data);
+                };
+            
+                // Escuchar cambios en la conectividad
+                window.addEventListener('online', () => {
+                    if (socket.readyState === WebSocket.CLOSED) {
+                        ConectarWebSocket(direccionServidor, msg);
+                    }
+                });
+            
+                window.addEventListener('offline', () => {
+                    console.warn("El dispositivo está offline.");
+                    if (socket.readyState === WebSocket.OPEN) {
+                        socket.close();
+                    }
+                });
+            }           
             function RecibirMensajes(){
                 if (socket.readyState === WebSocket.OPEN) {
                     // Evento que se activa cuando se recibe un mensaje del servidor
