@@ -8,7 +8,7 @@ var urlsToCache = [
   '/Logo.GSCS.png',
   '/images/logo.png',
   '/index.html',
-  '/Icono.TATETI.512.png',
+  '/Icono ta te ti.png',
   '/Estilos.css',
   '/Codigo.js'
 ];
