@@ -1,0 +1,35 @@
+{
+    "background_color": "#000000",
+    "dir": "ltr",
+    "display": "browser",
+    "name": "Memory Game",
+    "orientation": "any",
+    "scope": "/",
+    "short_name": "TTT",
+    "theme_color": "#800000",
+    "id": "G_S_C_S",
+    "description": "Juego Tic Tac Toe (TA TE TI) en raya, descargable desde la web",
+    "categories": [
+      "games"
+    ],
+    "start_url": "/index.html",
+    "icons": [
+      {
+        "src": "/Icono.TATETI.512.png",
+        "sizes": "512x512",
+        "type": "image/png"
+      }
+    ],
+    "screenshots": [
+      {
+        "src": "/imagenes/Captura 1.png",
+        "sizes": "640x480",
+        "type": "image/png"
+      },
+      {
+        "src": "/imagenes/Captura 2.png",
+        "sizes": "640x480",
+        "type": "image/png"
+      }
+    ]
+  }
