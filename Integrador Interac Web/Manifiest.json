@@ -12,23 +12,23 @@
     "categories": [
       "games"
     ],
-    "start_url": "/index.html",
+    "start_url": "index.html",
     "icons": [
       {
-        "src": "/Icono.TATETI.512.png",
+        "src": "Icono.TATETI.512.png",
         "sizes": "512x512",
         "type": "image/png"
       }
     ],
     "screenshots": [
       {
-        "src": "/imagenes/Captura 1.png",
-        "sizes": "640x480",
+        "src": "Captura Tateti Inicio.png",
+        "sizes": "720x720",
         "type": "image/png"
       },
       {
-        "src": "/imagenes/Captura 2.png",
-        "sizes": "640x480",
+        "src": "Captura Tateti Juego.png",
+        "sizes": "720x720",
         "type": "image/png"
       }
     ]
