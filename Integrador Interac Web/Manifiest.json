@@ -15,7 +15,7 @@
     "start_url": "index.html",
     "icons": [
       {
-        "src": "Icono tateti.png",
+        "src": "Icono.tateti.png",
         "sizes": "512x512",
         "type": "image/png"
       }
