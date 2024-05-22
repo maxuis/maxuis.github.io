@@ -3,18 +3,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const gameBoardScreen = document.getElementById('game-board');
     const board = document.getElementById('board');
     const cells = document.querySelectorAll('.cell');
-    const resetButton = document.getElementById('reset');
-    const pvpButton = document.getElementById('pvp');
+    const resetButton = document.getElementById('reset');    
     const pvcButton = document.getElementById('pvc');
 
-    let currentPlayer = 'X';
-    let gameMode = 'pvp';
-    let boardState = Array(9).fill(null);
-
-    pvpButton.addEventListener('click', () => {
-        gameMode = 'pvp';
-        startGame();
-    });
+    let currentPlayer = 'X';    
+    let boardState = Array(9).fill(null);    
 
     pvcButton.addEventListener('click', () => {
         gameMode = 'pvc';
@@ -51,12 +44,12 @@ document.addEventListener('DOMContentLoaded', () => {
         cell.classList.add('disabled');
 
         if (checkWinner()) {
-            setTimeout(() => alert(`${currentPlayer} wins!`), 100);
+            setTimeout(() => alert(`EL JUGADOR ( ${currentPlayer} ) OBTIENE VICTORIA!`), 100);
             return;
         }
 
         if (boardState.every(cell => cell)) {
-            setTimeout(() => alert(`It's a tie!`), 100);
+            setTimeout(() => alert(`¡EMPATE!`), 100);
             return;
         }
 
@@ -75,12 +68,12 @@ document.addEventListener('DOMContentLoaded', () => {
         cells[randomIndex].classList.add('disabled');
 
         if (checkWinner()) {
-            setTimeout(() => alert(`${currentPlayer} wins!`), 100);
+            setTimeout(() => alert(`EL JUGADOR ( ${currentPlayer} ) OBTIENE VICTORIA!`), 100);
             return;
         }
 
         if (boardState.every(cell => cell)) {
-            setTimeout(() => alert(`It's a tie!`), 100);
+            setTimeout(() => alert(`¡EMPATE!`), 100);
             return;
         }
 
