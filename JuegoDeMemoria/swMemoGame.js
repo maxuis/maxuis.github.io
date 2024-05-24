@@ -4,11 +4,13 @@ var CACHE_NAME = 'mi-pwa-cache';
 // Lista de archivos a cachear
 var urlsToCache = [
   '/',
-  '/indexMemoGame.html',
-  '/EstiloMemoGame.css',
   '/CodigoMemoGame.js',
-  '/swMemoGame.js',
-  '/images/logo.png'
+  '/EstiloMemoGame.css',
+  '/Icono.JU.ME.png',
+  '/indexMemoGame.html',
+  '/ManifiestMemoGame.json',
+  '/MujerAndroide.jpg',
+  '/swMemoGame.js'
 ];
 
 // Evento de instalación
