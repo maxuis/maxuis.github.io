@@ -7,19 +7,30 @@ body {
   height: 100vh;
   margin: 0;
   background-color: #000000;
+}
+
+#Imagen-Fondo {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   background-image: url('MujerAndroide.jpg');
   background-size: cover;
   background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
+  transform: rotate(0deg);
+  transition: transform 0.1s;
+  z-index: -1;
 }
 
-#menu, #game {
+#Menu, #Juego {
+  position: relative;
+  z-index: 1;
   text-align: center;
-  margin: 0 auto; 
+  margin: 0 auto;   
 }
 
-h1 {
+h1, h2 {
   margin-bottom: 20px;
   color: rgb(255, 255, 255);
   border-radius: 10px;
@@ -27,7 +38,7 @@ h1 {
   box-shadow: 0 0px 25px rgb(255, 255, 255);
 }
 
-#game-board {
+#Tablero-Juego {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
   gap: 10px;
@@ -94,11 +105,11 @@ button {
   cursor: pointer;
   border: 5px solid red;   
 }
-#reset{
+#Resetear{
   border-radius: 10px;
   box-shadow: 0 0px 25px rgb(255, 255, 255);
 }
-#play-button {
+#Boton-Jugar {
   font-size: 20px;
   padding: 15px 30px;    
   border-radius: 10px;
