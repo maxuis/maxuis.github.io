@@ -15,19 +15,19 @@
   "start_url": "/indexMemoGam.html",
   "icons": [
     {
-      "src": "/Imagenes/Icono.png",
+      "src": "/Icono.JU.ME.png",
       "sizes": "512x512",
       "type": "image/png"
     }
   ],
   "screenshots": [
     {
-      "src": "/imagenes/Captura 1.png",
+      "src": "/Captura.MemoGame.1.png",
       "sizes": "640x480",
       "type": "image/png"
     },
     {
-      "src": "/imagenes/Captura 2.png",
+      "src": "/Captura.MemoGame.2.png",
       "sizes": "640x480",
       "type": "image/png"
     }
