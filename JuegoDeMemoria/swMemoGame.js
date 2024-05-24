@@ -6,7 +6,7 @@ var urlsToCache = [
   '/',
   '/CodigoMemoGame.js',
   '/EstiloMemoGame.css',
-  '/Icono.JU.ME.png',
+  '/Icono.MemoGame.png',
   '/indexMemoGame.html',
   '/ManifiestMemoGame.json',
   '/MujerAndroide.jpg',
