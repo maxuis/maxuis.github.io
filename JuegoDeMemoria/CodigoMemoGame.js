@@ -1,135 +1,138 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const menu = document.getElementById('menu');
-    const game = document.getElementById('game');
-    const playButton = document.getElementById('play-button');
-    const gameBoard = document.getElementById('game-board');
-    const resetButton = document.getElementById('reset');
-    let cards = [];
-    let flippedCards = [];
-    let matches = 0;
-    let lastFlippedCard = null;
-    let gameStarted = false;
-
+    const ImagenDeFondo = document.getElementById('Imagen-Fondo');
+    const Menu = document.getElementById('Menu');
+    const Juego = document.getElementById('Juego');
+    const BotonJugar = document.getElementById('Boton-Jugar');
+    const TableroJuego = document.getElementById('Tablero-Juego');
+    const BotonResetear = document.getElementById('Resetear');
+    let Cartas = [];
+    let CartasVolteadas = [];
+    let CartasEncontradas = 0;
+    let UltimaCartaVolteada = null;
+    let JuegoIniciado = false;
+    const BotonMusica = document.getElementById('Musica');
+    let MusicaActiva = false;
     const cardValues = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
     let cardSet = cardValues.concat(cardValues); // Duplicate each card
 
-    function shuffle(array) {
+    const sounds = [
+        new Audio('Sonidos/Sonido1.mp3'),
+        new Audio('Sonidos/Sonido2.mp3'),
+        new Audio('Sonidos/Sonido3.mp3'),
+        new Audio('Sonidos/Sonido4.mp3'),
+        new Audio('Sonidos/Sonido5.mp3')
+    ];
+    function ReproducirSonidoAleatorio() {
+        // Verificar si la música está habilitada
+        if (MusicaActiva) {
+            // Si la música está habilitada, reproducir sonido aleatorio
+            const randomIndex = Math.floor(Math.random() * sounds.length);
+            const sound = sounds[randomIndex];
+            sound.play();
+            sound.onended = () => {
+                // Si el sonido termina, verificar si la música aún está habilitada antes de reproducir otro sonido
+                if (MusicaActiva) {
+                    ReproducirSonidoAleatorio();
+                }
+            };
+        }
+    }    
+    BotonMusica.addEventListener('click', () => {
+        if (MusicaActiva) {
+            // Si la música está activada, detenerla            
+            BotonMusica.textContent = 'Musica NO';
+            MusicaActiva = false;
+            ReproducirSonidoAleatorio();
+        } else {
+            // Si la música está desactivada, reproducirla            
+            BotonMusica.textContent = 'Musica SI';
+            MusicaActiva = true;
+            ReproducirSonidoAleatorio();
+        }
+    });
+
+    function BarajarCarta(array) {
         for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [array[i], array[j]] = [array[j], array[i]];
         }
     }
 
-    function createCard(value) {
+    function CrearCarta(value) {
         const card = document.createElement('div');
         card.classList.add('card');
         card.innerHTML = `
             <div class="front"></div>
             <div class="back">${value}</div>
         `;
-        card.addEventListener('click', () => flipCard(card, value));
+        card.addEventListener('click', () => InvertirCarta(card, value));
         return card;
     }
 
-    function flipCard(card, value) {
-        if (flippedCards.length < 2 && !card.classList.contains('flipped')) {
+    function InvertirCarta(card, value) {
+        if (CartasVolteadas.length < 2 && !card.classList.contains('flipped')) {
             card.classList.add('flipped');
-            flippedCards.push({ card, value });
-            vibrate(200);
+            CartasVolteadas.push({ card, value });
+            Vibrar(200);
 
-            if (flippedCards.length === 2) {
-                if (flippedCards[0].value === flippedCards[1].value) {
-                    matches++;
-                    flippedCards = [];
-                    if (matches === cardValues.length) {
-                        showNotification('You won!', 'Congratulations, you matched all pairs!');
-                    }
+            if (CartasVolteadas.length === 2) {
+                if (CartasVolteadas[0].value === CartasVolteadas[1].value) {
+                    CartasEncontradas++;
+                    CartasVolteadas = [];                    
                 } else {
                     setTimeout(() => {
-                        flippedCards.forEach(item => item.card.classList.remove('flipped'));
-                        flippedCards = [];
+                        CartasVolteadas.forEach(item => item.card.classList.remove('flipped'));
+                        CartasVolteadas = [];
                     }, 1000);
                 }
             }
         }
-    }
+    }    
 
-    function resetGame() {
-        matches = 0;
-        flippedCards = [];
-        lastFlippedCard = null;
-        cards.forEach(card => card.classList.remove('flipped'));
+    function ResetearJuego() {                
+        CartasEncontradas = 0;
+        CartasVolteadas = [];
+        UltimaCartaVolteada = null;
+        Cartas.forEach(card => card.classList.remove('flipped'));
         setTimeout(() => {
-            gameBoard.innerHTML = '';
-            initGame();
+            TableroJuego.innerHTML = '';
+            IniciarJuego();
         }, 500);
     }
 
-    function initGame() {
-        shuffle(cardSet);
-        cards = cardSet.map(value => createCard(value));
-        cards.forEach(card => gameBoard.appendChild(card));
-        gameStarted = true;  // The game starts here
+    function IniciarJuego() {               
+        BarajarCarta(cardSet);
+        Cartas = cardSet.map(value => CrearCarta(value));
+        Cartas.forEach(card => TableroJuego.appendChild(card));
+        JuegoIniciado = true;  // Empezar Juego        
     }
 
-    playButton.addEventListener('click', () => {
-        menu.style.display = 'none';
-        game.style.display = 'block';
-        gameStarted = false;
-        initGame();
+    BotonJugar.addEventListener('click', () => {
+        Menu.style.display = 'none';
+        Juego.style.display = 'block';
+        JuegoIniciado = false;
+        IniciarJuego();
     });
 
-    resetButton.addEventListener('click', () => {
-        gameStarted = false;  // The game has to be reset before it can be started again
-        resetGame();
+    BotonResetear.addEventListener('click', () => {
+        JuegoIniciado = false;  // El juego se reinicia antes de poder volver a iniciarlo.
+        ResetearJuego();
     });
 
-    // Gyroscope event listener
+    // Evento Giroscopio para girar la imagen de fondo
     if (window.DeviceOrientationEvent) {
         window.addEventListener('deviceorientation', event => {
-            if (gameStarted) {
-                if (lastFlippedCard && Math.abs(event.gamma) > 20) {
-                    flipCard(lastFlippedCard.card, lastFlippedCard.value);
-                    lastFlippedCard = null;
-                } else if (!lastFlippedCard && flippedCards.length < 2) {
-                    const card = cards.find(c => !c.classList.contains('flipped'));
-                    if (card) {
-                        lastFlippedCard = { card, value: card.querySelector('.back').textContent };
-                        card.classList.add('flipped');
-                        vibrate(200);
-                    }
-                }
+            const rotation = event.gamma; // Rota en base al eje gamma
+            if (rotation) {
+                ImagenDeFondo.style.transform = `rotate(${rotation}deg)`;
             }
         });
     }
 
-    // Vibration API
-    function vibrate(duration) {
+    // API de Vibracion
+    function Vibrar(duration) {
         if (navigator.vibrate) {
             navigator.vibrate(duration);
         }
-    }
-
-    // Push Notifications
-    function showNotification(title, body) {
-        if (Notification.permission === 'granted') {
-            navigator.serviceWorker.getRegistration().then(reg => {
-                reg.showNotification(title, {
-                    body,
-                    icon: 'icon.png'
-                });
-                vibrate(500);
-            });
-        }
-    }
-
-    if ('Notification' in window && navigator.serviceWorker) {
-        navigator.serviceWorker.register('service-worker.js').then(reg => {
-            Notification.requestPermission().then(permission => {
-                if (permission === 'granted') {
-                    showNotification('Welcome', 'Memory Game is ready to play!');
-                }
-            });
-        });
-    }
+    }    
 });
