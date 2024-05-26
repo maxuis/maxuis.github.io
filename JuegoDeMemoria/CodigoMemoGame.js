@@ -6,13 +6,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const BotonJugar = document.getElementById('Boton-Jugar');    
     const BotonResetear = document.getElementById('Resetear');
     const BotonMusica = document.getElementById('Musica');
-    const gyroButton = document.getElementById('gyro-button');        
+    const BotonGiros = document.getElementById('Boton-Giros');        
     let Cartas = [];
     let CartasVolteadas = [];
     let CartasEncontradas = 0;
     let UltimaCartaVolteada = null;
     let JuegoIniciado = false;
-    let gyroEnabled = false;
+    let GiroActivado = false;
     let MusicaActiva = false;            
     const cardValues = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
     let cardSet = cardValues.concat(cardValues);
@@ -87,9 +87,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (CartasVolteadas.length === 2) {
                 if (CartasVolteadas[0].value === CartasVolteadas[1].value) {
                     CartasEncontradas++;
-                    CartasVolteadas = [];                    
+                    CartasVolteadas = [];
+                    ReproducirSonidoBoton();                    
                 } else {
                     setTimeout(() => {
+                        ReproducirSonidoBoton();                        
                         CartasVolteadas.forEach(item => item.card.classList.remove('flipped'));
                         CartasVolteadas = [];
                     }, 1000);
@@ -130,31 +132,36 @@ document.addEventListener('DOMContentLoaded', () => {
         ResetearJuego();
     });
 
-    gyroButton.addEventListener('click', () => {
-        if (!gyroEnabled) {
+    BotonGiros.addEventListener('click', () => {
+        if (!GiroActivado) {
             let confirmacion = confirm('¿Deseas permitir el uso del giroscopio para girar la imagen de fondo?');
             if (confirmacion) {
-                gyroEnabled = true;
-                gyroButton.textContent = 'Girar Imagen: Sí';
+                GiroActivado = true;
+                BotonGiros.textContent = 'Girar Imagen Sí';
                 alert('El uso del giroscopio ha sido habilitado.');
+                // Evento Giroscopio para girar la imagen de fondo
+                if (window.DeviceOrientationEvent) {
+                    window.addEventListener('deviceorientation', event => {
+                        if (gyroEnabled) {
+                            const rotation = event.gamma; // Rota en base al eje gamma (X/Y/Z)
+                            console.log(`Gamma rotation: ${rotation}`);
+                            if (rotation !== null) {
+                                ImagenDeFondo.style.transform = `rotate(${rotation}deg)`;
+                            }
+                        }
+                    });
+                } else {
+                    alert('DeviceOrientationEvent no está soportado en este dispositivo/navegador.');
+                }
             } else {
                 alert('Has rechazado el uso del giroscopio.');
             }
         } else {
-            gyroEnabled = false;
-            gyroButton.textContent = 'Girar Imagen: No';
+            GiroActivado = false;
+            BotonGiros.textContent = 'Girar Imagen No';
             alert('El uso del giroscopio ha sido deshabilitado.');
         }
-    });
-    // Evento Giroscopio para girar la imagen de fondo
-    if (window.DeviceOrientationEvent) {
-        window.addEventListener('deviceorientation', event => {
-            const rotation = event.gamma; // Rota en base al eje gamma
-            if (rotation) {
-                ImagenDeFondo.style.transform = `rotate(${rotation}deg)`;
-            }
-        });
-    }
+    });    
 
     // API de Vibracion
     function Vibrar(duration) {
