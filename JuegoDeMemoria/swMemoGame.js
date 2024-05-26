@@ -10,7 +10,13 @@ var urlsToCache = [
   '/indexMemoGame.html',
   '/ManifiestMemoGame.json',
   '/MujerAndroide.jpg',
-  '/swMemoGame.js'
+  '/swMemoGame.js',
+  '/Sonidos/Sonido1.mp3',
+  '/Sonidos/Sonido2.mp3',
+  '/Sonidos/Sonido3.mp3',
+  '/Sonidos/Sonido4.mp3',
+  '/Sonidos/Sonido5.mp3',
+  '/Sonidos/Sonido6.mp3'
 ];
 
 // Evento de instalación
