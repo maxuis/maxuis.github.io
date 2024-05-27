@@ -144,3 +144,39 @@ button {
   border-radius: 10px;
   box-shadow: 0 0px 25px rgb(255, 255, 255);
 }
+
+/* Estilos para pantallas pequeñas (celulares) */
+@media (max-width: 600px) {
+  #Menu-Inicio h1, #Juego h1, #Juego h2 #Menu-Ajustes {
+      font-size: 1.5em;
+  }
+
+  button {
+      padding: 8px 16px;
+      font-size: 0.9em;
+  }
+}
+
+/* Estilos para pantallas medianas (tablets) */
+@media (min-width: 601px) and (max-width: 1024px) {
+  #Menu-Inicio h1, #Juego h1, #Juego h2 #Menu-Ajustes {
+      font-size: 1.8em;
+  }
+
+  button {
+      padding: 9px 18px;
+      font-size: 0.95em;
+  }
+}
+
+/* Estilos para pantallas grandes (desktop) */
+@media (min-width: 1024px) {
+  #Menu-Inicio h1, #Juego h1, #Juego h2 #Menu-Ajustes {
+      font-size: 2em;
+  }
+
+  button {
+      padding: 10px 20px;
+      font-size: 1em;
+  }
+}
