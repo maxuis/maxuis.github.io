@@ -12,22 +12,26 @@
         if (typeof navigator.serviceWorker !== 'undefined') {
           navigator.serviceWorker.register('swMemoGame.js')
         }
-    </script> 
-    <div id="Imagen-Fondo"></div>        
-    <div id="Menu">
-        <h1 class="text-with-border">Juego de Memoria</h1>
-        <button id="Boton-Jugar">Jugar</button>
+    </script>           
+    <div id="Menu-Inicio">
+        <h1 class="text-with-border-one">Juego de Memoria</h1>
+        <button id="Boton-Jugar" class="text-with-border-tree">Jugar</button>
     </div>
     <div id="Juego" style="display: none;">
-        <h1 class="text-with-thick-border">Juego de Memoria</h1>
-        <h2 class="text-with-border">Encuentra Las Cartas Pares</h2>
+        <h1 class="text-with-border-one">Juego de Memoria</h1>
+        <h2 class="text-with-border-two">Encuentra Las Cartas Pares</h2>
         <div id="Tablero-Juego">
             <!-- Las cartas se generarán dinámicamente aquí con JS. -->
         </div>
-        <button id="Resetear">Resetear Juego</button>
-        <button id="Musica">Musica</button>
-        <button id="Boton-Giros">Girar Imagen: No</button>
-    </div>        
+        <button id="Boton-Resetear" class="text-with-border-tree">Resetear Juego</button>
+        <button id="Boton-Ajustes" class="text-with-border-tree">Ajustes</button>        
+    </div>  
+    <div id = "Menu-Ajustes">
+        <button id="Regresar-Juego" class="text-with-border-tree">Juego</button>
+        <button id="Musica" class="text-with-border-tree">Musica NO</button>        
+        <button id="Boton-Giros" class="text-with-border-tree">Girar Imagen: No</button>
+    </div>    
+    <div id="Imagen-Fondo"></div>    
     <script src="CodigoMemoGame.js"></script>
 </body>
 </html>
