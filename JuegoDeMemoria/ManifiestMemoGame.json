@@ -12,7 +12,7 @@
   "categories": [
     "games"
   ],
-  "start_url": "/indexMemoGam.html",
+  "start_url": "indexMemoGam.html",
   "icons": [
     {
       "src": "Icono.MemoGame.png",
