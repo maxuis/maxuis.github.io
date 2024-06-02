@@ -1,0 +1,67 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 100;
+    background-image: url('Mujer.Androide.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+h1{
+    color: #ff0000;
+    
+}
+
+#game-mode, #game-board {
+    text-align: center;
+}
+
+button {
+    margin: 10px;
+    padding: 15px 30px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #ff0000;
+    background-color: #000000;
+    border: 5px;
+    border-color: #ff0000;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 0px 25px #ff0000;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+#board {
+    display: grid;
+    grid-template-columns: repeat(3, 100px);
+    grid-gap: 5px;
+    margin: 20px 0;
+}
+
+.cell {
+    width: 100px;
+    height: 100px;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    cursor: pointer;
+    border-radius: 10px;
+    box-shadow: 0 0px 25px rgb(255, 255, 255);
+    border: 5px solid #ff0000;
+}
+
+.cell:hover {
+    background-color: #f9f9f9;
+}
+
+button#reset {
+    display: block;
+    margin: 20px auto;
+}

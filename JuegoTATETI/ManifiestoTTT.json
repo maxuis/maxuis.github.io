@@ -1,0 +1,35 @@
+{
+    "background_color": "#000000",
+    "dir": "ltr",
+    "display": "browser",
+    "name": "TA TE TI",
+    "orientation": "any",
+    "scope": "/",
+    "short_name": "TaTeTi",
+    "theme_color": "#800000",
+    "id": "G_S_C_S",
+    "description": "Juego Tic Tac Toe (TA TE TI) en raya, descargable desde la web",
+    "categories": [
+      "games"
+    ],
+    "start_url": "indexTTT.html",
+    "icons": [
+      {
+        "src": "IconoTTT.png",
+        "sizes": "512x512",
+        "type": "image/png"
+      }
+    ],
+    "screenshots": [
+      {
+        "src": "Captura 1.png",
+        "sizes": "640x480",
+        "type": "image/png"
+      },
+      {
+        "src": "Captura 2.png",
+        "sizes": "640x480",
+        "type": "image/png"
+      }
+    ]
+  }
