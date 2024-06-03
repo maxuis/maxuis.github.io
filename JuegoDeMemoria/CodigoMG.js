@@ -180,12 +180,13 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('El uso del giroscopio ha sido deshabilitado.');
         }
     });    
+    
     function Giroscopio_Activado() {
         // Evento Giroscopio para girar la imagen de fondo
         if (window.DeviceOrientationEvent) {
             window.addEventListener('deviceorientation', event => {
                 if (GiroActivado) {
-                    const rotation = event.gamma; // Rota en base al eje gamma (X/Y/Z)
+                    const rotation = event.gamma; // Rota en base al eje gamma (Y)
                     console.log(`Gamma rotation: ${rotation}`);
                     if (rotation !== null) {
                         ImagenDeFondo.style.transform = `rotate(${rotation}deg)`;
