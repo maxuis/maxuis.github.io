@@ -1,0 +1,146 @@
+body {
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 130vh;
+  margin: 0;
+  background-color: #000000;
+}
+
+#Imagen-Fondo {
+  width: 100%;
+  height: 100vh;
+  background-image: url('Imagenes/Mujer.Androide.jpg');
+  background-size: cover;
+  background-position: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  transition: transform 0.2s ease-in-out;
+}
+
+#Menu-Inicio, #Juego, #Menu-Ajustes {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  margin: 0 auto;   
+}
+
+h1, h2 {
+  margin-bottom: 20px;
+  color: rgb(255, 255, 255);
+  border-radius: 10px;
+  padding: 15px 30px; 
+  border: 5px solid red; 
+  box-shadow: 0 0px 100px rgb(255, 255, 255);
+}
+.text-with-border-one {
+  font-size: 40px;
+  color: white;
+  text-shadow: 
+      -4px -4px 0 #000,  
+       4px -4px 0 #000,
+      -4px  4px 0 #000,
+       4px  4px 0 #000;  
+}
+
+.text-with-border-two {
+  font-size: 30px;
+  color: white;
+  text-shadow: 
+      -3px -3px 0 #000,  
+       3px -3px 0 #000,
+      -3px  3px 0 #000,
+       3px  3px 0 #000;  
+}
+
+.text-with-border-tree {
+  font-size: 20px;
+  color: white;
+  text-shadow: 
+      -2px -2px 0 #ff0000,  
+      2px -2px 0 #ff0000,
+      -2px  2px 0 #ff0000,
+      2px  2px 0 #ff0000; 
+}
+
+#Tablero-Juego {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 10px;
+  width: 80%;
+  max-width: 600px;
+  margin: 0 auto; 
+  margin-bottom: 20px;
+  align-items: center;
+}
+
+.card {
+  width: 100%;
+  padding-top: 100%;
+  position: relative;
+  cursor: pointer;
+  transform-style: preserve-3d;
+  transition: transform 0.5s;
+}
+
+.card.flipped {
+  transform: rotateY(180deg);
+}
+
+.card .front, .card .back {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  backface-visibility: hidden;
+  border-radius: 10px;
+}
+
+.card .front {
+  background-color: #000000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 70px;
+  color: white;
+  border-radius: 10px;
+  box-shadow: 0 0px 25px rgb(255, 255, 255);
+}
+
+.card .back {
+  font-size: 70px;
+  color: #ff0000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  transform: rotateY(180deg);
+  border-radius: 10px;
+  box-shadow: 0 0px 25px rgb(255, 255, 255);
+  border: 5px solid red; 
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  color: #e6e6e6;
+  border-radius: 10px;
+  background-color: transparent;
+  cursor: pointer;
+  border: 5px solid red;   
+}
+#Resetear{
+  border-radius: 10px;
+  box-shadow: 0 0px 25px rgb(255, 255, 255);
+}
+#Boton-Jugar {
+  font-size: 20px;
+  padding: 15px 30px;    
+  border-radius: 10px;
+  box-shadow: 0 0px 25px rgb(255, 255, 255);
+}
