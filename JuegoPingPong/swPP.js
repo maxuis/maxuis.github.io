@@ -1,5 +1,5 @@
 // Nombre del caché
-var CACHE_NAME = 'Cache-PWA-PP';
+var CACHE_NAME_PP = 'Cache-PWA-PP';
 
 // Lista de archivos a cachear
 var urlsToCache = [
