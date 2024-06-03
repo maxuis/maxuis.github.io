@@ -196,5 +196,5 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('DeviceOrientationEvent no está soportado en este dispositivo/navegador.');
         };  
     }
-    setInterval(Giroscopio_Activado, 1000 / 60);
+    Giroscopio_Activado();
 });
