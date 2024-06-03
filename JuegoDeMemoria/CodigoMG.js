@@ -180,19 +180,21 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('El uso del giroscopio ha sido deshabilitado.');
         }
     });    
-     
-    // Evento Giroscopio para girar la imagen de fondo
-    if (window.DeviceOrientationEvent) {
-        window.addEventListener('deviceorientation', event => {
-            if (gyroEnabled) {
-                const rotation = event.gamma; // Rota en base al eje gamma (X/Y/Z)
-                console.log(`Gamma rotation: ${rotation}`);
-                if (rotation !== null) {
-                    ImagenDeFondo.style.transform = `rotate(${rotation}deg)`;
+    function Giroscopio_Activado() {
+        // Evento Giroscopio para girar la imagen de fondo
+        if (window.DeviceOrientationEvent) {
+            window.addEventListener('deviceorientation', event => {
+                if (GiroActivado) {
+                    const rotation = event.gamma; // Rota en base al eje gamma (X/Y/Z)
+                    console.log(`Gamma rotation: ${rotation}`);
+                    if (rotation !== null) {
+                        ImagenDeFondo.style.transform = `rotate(${rotation}deg)`;
+                    }
                 }
-            }
-        });
-    } else {
-        alert('DeviceOrientationEvent no está soportado en este dispositivo/navegador.');
-    }   
+            });
+        } else {
+            alert('DeviceOrientationEvent no está soportado en este dispositivo/navegador.');
+        };  
+    }
+    setInterval(Giroscopio_Activado, 1000 / 60);
 });
