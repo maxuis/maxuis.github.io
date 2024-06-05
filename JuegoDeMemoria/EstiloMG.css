@@ -4,7 +4,7 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 130vh;
+  height: 110vh;
   margin: 0;
   background-color: #000000;
 }
@@ -18,11 +18,10 @@ body {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: -1;
-  transition: transform 0.2s ease-in-out;
+  z-index: -1;  
 }
 
-#Menu-Inicio, #Juego, #Menu-Ajustes {
+#Menu-Inicio, #Modo-Juego, #Juego, #Menu-Ajustes {
   position: relative;
   z-index: 1;
   text-align: center;
@@ -126,6 +125,7 @@ h1, h2 {
 }
 
 button {
+  box-shadow: 0 0px 25px rgb(255, 255, 255);
   padding: 10px 20px;
   font-size: 16px;
   color: #e6e6e6;
@@ -133,14 +133,4 @@ button {
   background-color: transparent;
   cursor: pointer;
   border: 5px solid red;   
-}
-#Resetear{
-  border-radius: 10px;
-  box-shadow: 0 0px 25px rgb(255, 255, 255);
-}
-#Boton-Jugar {
-  font-size: 20px;
-  padding: 15px 30px;    
-  border-radius: 10px;
-  box-shadow: 0 0px 25px rgb(255, 255, 255);
 }
