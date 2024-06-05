@@ -4,29 +4,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const MenuInicio = document.getElementById('Menu-Inicio');
     const MenuModo = document.getElementById('Modo-Juego')
     const MenuJuego = document.getElementById('Juego');
-    const MenuAjustesPC = document.getElementById('Menu-Ajustes-PC');
-    const MenuAjustesMovil = document.getElementById('Menu-Ajustes-Movil');
-    // Botones
+    const MenuAjustes = document.getElementById('Menu-Ajustes');    
+    // Botones Inicio
     const BotonJugar = document.getElementById('Boton-Jugar'); 
+    // Botones Modo
     const BotonPC = document.getElementById('Boton-PC');
     const BotonMovil = document.getElementById('Boton-Movil');     
+    // Botones Juego
     const BotonResetear = document.getElementById('Boton-Resetear');
     const BotonAjustes = document.getElementById('Boton-Ajustes');
-    // Botones Ajustes pc
-    const BotonRegresarJuegoPC = document.getElementById('Boton-Regresar-Juego-PC');  
-    const BotonMusicaPC = document.getElementById('Musica-PC');
-    const BotonInicioPC = document.getElementById('Boton-Inicio-PC');     
-    // Botones Ajustes Movil
-    const BotonRegresarJuegoM = document.getElementById('Boton-Regresar-Juego-M');  
-    const BotonMusicaM = document.getElementById('Musica-M');
-    const BotonInicioM = document.getElementById('Boton-Inicio-M'); 
-    const BotonGiros = document.getElementById('Boton-Giros'); 
+    // Botones Ajustes
+    const BotonRegresar = document.getElementById('Boton-Regresar');
+    const BotonMusica =  document.getElementById('Boton-Musica');
+    const BotonInicio = document.getElementById('Boton-Inicio');              
     let Cartas = [];
     let CartasVolteadas = [];
     let CartasEncontradas = 0;
     let UltimaCartaVolteada = false;
     let GiroActivado = false;
     let MusicaActiva = false;
+    let JuegoIniciado = false;
     let ModoJuego = "Nada"
     let IndiceMenu = 0;
     const ValorCartas = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
@@ -37,47 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
         new Audio('Sonidos/Sonido3.mp3'),
         new Audio('Sonidos/Sonido4.mp3'),
         new Audio('Sonidos/Sonido5.mp3')
-    ];
-
-    function ManejoMenus(IndiceMenu){
-        switch(IndiceMenu){
-            case 0:
-                MenuInicio.style.display = 'block' // 0
-                MenuModo.style.display = 'none' // 1
-                MenuJuego.style.display = 'none' // 2
-                MenuAjustesPC.style.display = 'none' // 3
-                MenuAjustesMovil.style.display = 'none' //4
-                break;
-            case 1:
-                MenuInicio.style.display = 'none' // 0
-                MenuModo.style.display = 'block' // 1
-                MenuJuego.style.display = 'none' // 2
-                MenuAjustesPC.style.display = 'none' // 3
-                MenuAjustesMovil.style.display = 'none' //4
-                break;
-            case 2:
-                MenuInicio.style.display = 'none' // 0
-                MenuModo.style.display = 'none' // 1
-                MenuJuego.style.display = 'block' // 2
-                MenuAjustesPC.style.display = 'none' // 3
-                MenuAjustesMovil.style.display = 'none' //4
-                break;
-            case 3:
-                MenuInicio.style.display = 'none' // 0
-                MenuModo.style.display = 'none' // 1
-                MenuJuego.style.display = 'none' // 2
-                MenuAjustesPC.style.display = 'block' // 3
-                MenuAjustesMovil.style.display = 'none' //4
-                break;
-            case 4:
-                MenuInicio.style.display = 'none' // 0
-                MenuModo.style.display = 'none' // 1
-                MenuJuego.style.display = 'none' // 2
-                MenuAjustesPC.style.display = 'none' // 3
-                MenuAjustesMovil.style.display = 'block' //4
-                break;
-        }
-    }
+    ];    
 
     // API de Vibracion
     function Vibrar(duration) {
@@ -86,7 +43,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function ReproducirSonidoAleatorio() {
+    function Giroscopio_Movil(){
+        if (window.DeviceOrientationEvent) {
+            window.addEventListener('deviceorientation', event => {
+                const rotation = event.gamma;
+                if (rotation !== null) {
+                    document.querySelectorAll('.card').forEach(card => {
+                        card.style.transform = `rotateY(${rotation}deg)`;
+                    });
+                }
+            });
+        } else {
+            alert('DeviceOrientationEvent no está soportado en este dispositivo/navegador.');
+        }
+    }
+
+    function ReproducirMusica() {
         // Verificar si la música está habilitada
         if (MusicaActiva) {
             // Si la música está habilitada, reproducir sonido aleatorio
@@ -96,13 +68,13 @@ document.addEventListener('DOMContentLoaded', () => {
             sound.onended = () => {
                 // Si el sonido termina, verificar si la música aún está habilitada antes de reproducir otro sonido
                 if (MusicaActiva) {
-                    ReproducirSonidoAleatorio();
+                    ReproducirMusica();
                 }
             };
         }
-    } 
+    }     
     
-    function ReproducirSonidoBoton() {
+    function SonidoBoton() {
         const clickSound = new Audio('Sonidos/Sonido6.mp3');
         clickSound.play();
     }   
@@ -121,9 +93,11 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="front"></div>
             <div class="back">${value}</div>
         `;
+        // Momo pcc solo requiere clik
         if (ModoJuego === "MODO PC"){
             card.addEventListener('click', () => InvertirCarta(card, value));
         }
+        // Modo Movil requiere giroscopio
         if (ModoJuego === "MODO MOVIL"){
             Giroscopio_Movil();
         }
@@ -131,7 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function InvertirCarta(card, value) {
-        ReproducirSonidoBoton();
+        SonidoBoton();
         if (CartasVolteadas.length < 2 && !card.classList.contains('flipped')) {
             card.classList.add('flipped');
             CartasVolteadas.push({ card, value });
@@ -141,10 +115,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (CartasVolteadas[0].value === CartasVolteadas[1].value) {
                     CartasEncontradas++;
                     CartasVolteadas = [];
-                    ReproducirSonidoBoton();                    
+                    SonidoBoton();                    
                 } else {
                     setTimeout(() => {
-                        ReproducirSonidoBoton();  
+                        SonidoBoton();  
                         Vibrar(250);
                         CartasVolteadas.forEach(item => item.card.classList.remove('flipped'));
                         CartasVolteadas = [];
@@ -166,40 +140,92 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 500);
     }
 
-    function IniciarJuego() {                    
-        BarajarCarta(cardSet);
-        Cartas = cardSet.map(value => CrearCarta(value));
-        Cartas.forEach(card => TableroJuego.appendChild(card));
-        JuegoIniciado = true;  // Empezar Juego        
+    function IniciarJuego() { 
+        if (JuegoIniciado === false){            
+            BarajarCarta(cardSet);
+            Cartas = cardSet.map(value => CrearCarta(value));
+            Cartas.forEach(card => TableroJuego.appendChild(card));
+            JuegoIniciado = true;  // Empezar Juego        
+        }                           
+    }
+
+    function ManejoMenus(IndiceMenu){
+        switch(IndiceMenu){
+            case 0:
+                MenuInicio.style.display = 'block' // 0
+                MenuModo.style.display = 'none' // 1
+                MenuJuego.style.display = 'none' // 2
+                MenuAjustes.style.display = 'none' // 3                               
+                break;
+            case 1:
+                MenuInicio.style.display = 'none' // 0
+                MenuModo.style.display = 'block' // 1
+                MenuJuego.style.display = 'none' // 2
+                MenuAjustes.style.display = 'none' // 3
+                IniciarJuego();
+                break;
+            case 2:
+                MenuInicio.style.display = 'none' // 0
+                MenuModo.style.display = 'none' // 1
+                MenuJuego.style.display = 'block' // 2
+                MenuAjustes.style.display = 'none' // 3
+                break;
+            case 3:
+                MenuInicio.style.display = 'none' // 0
+                MenuModo.style.display = 'none' // 1
+                MenuJuego.style.display = 'none' // 2
+                MenuAjustes.style.display = 'block' // 3
+                break;
+            case 4:
+                MenuInicio.style.display = 'none' // 0
+                MenuModo.style.display = 'none' // 1
+                MenuJuego.style.display = 'none' // 2
+                MenuAjustes.style.display = 'none' // 3
+                break;
+        }
     }
 
     BotonJugar.addEventListener('click', () => {  
-        ReproducirSonidoBoton();      
+        SonidoBoton();      
         ManejoMenus(1);
     });
 
     BotonPC.addEventListener('click', () => {  
         ModoJuego = "MODO PC"   
-        ReproducirSonidoBoton();
+        SonidoBoton();
         ManejoMenus(2);
-        IniciarJuego();
+        
     });
-    
+ 
     BotonMovil.addEventListener('click', () => {  
-        ModoJuego = "MODO MOVIL"   
-        ReproducirSonidoBoton();      
-        ManejoMenus(2);
-        IniciarJuego();
+        ModoJuego = "MODO MOVIL"  
+        if (!GiroActivado) {
+            let confirmacion = confirm('¿Deseas permitir el uso del giroscopio para girar las cartas del jueugo?');
+            if (confirmacion) {
+                GiroActivado = true;                
+                alert('El uso del giroscopio ha sido habilitado.'); 
+                ManejoMenus(2);                  
+            } else {
+                alert('Has rechazado el uso del giroscopio... Regresando a Inicio');                
+                ManejoMenus(0);
+            }
+        } else {
+            GiroActivado = false;
+            BotonGirosCopio.textContent = 'Girar Imagen No';
+            alert('El uso del giroscopio ha sido deshabilitado. No se puede juugar en modo Movil... Regresando a Inicio');            
+            ManejoMenus(0);
+        } 
+        SonidoBoton();                   
     });
     
     BotonResetear.addEventListener('click', () => {
-        ReproducirSonidoBoton();        
+        SonidoBoton();        
         JuegoIniciado = false;  // El juego se reinicia antes de poder volver a iniciarlo.
         ResetearJuego();
     });
 
     BotonAjustes.addEventListener('click', () =>{
-        ReproducirSonidoBoton();
+        SonidoBoton();
         if (ModoJuego === "MODO PC"){
             ManejoMenus(3);
         }
@@ -208,63 +234,32 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     })
 
-    BotonRegresarJuegoPC.addEventListener('click', () => {
-        ReproducirSonidoBoton();
-        ManejoMenus(1);
+    BotonRegresar.addEventListener('click', () => {
+        SonidoBoton();
+        ManejoMenus(2);
     })
-    
-    BotonMusicaPC.addEventListener('click', () => {
-        ReproducirSonidoBoton();
-        if (MusicaActiva) {
+
+    BotonMusica.addEventListener('click', () => {          
+        SonidoBoton();
+        if (MusicaActiva === true) {
             // Si la música está activada, detenerla            
-            BotonMusicaPC.textContent = 'Musica NO';
+            BotonMusica.textContent = 'Musica >> NO';
             MusicaActiva = false;            
-            ReproducirSonidoAleatorio();
+            ReproducirMusica();
         } else {
             // Si la música está desactivada, reproducirla            
-            BotonMusicaPC.textContent = 'Musica SI';
+            BotonMusica.textContent = 'Musica >> SI';
             MusicaActiva = true;            
-            ReproducirSonidoAleatorio();
-        }
-    });
-
-    BotonInicioPC.addEventListener('click', () => {
-        ReproducirSonidoBoton();
-        MusicaActiva = false;
-        BotonMusicaPC.textContent = 'Musica'
-        ManejoMenus(0);
-        ResetearJuego();
-    })
-
-    BotonGiros.addEventListener('click', () => {
-        if (!GiroActivado) {
-            let confirmacion = confirm('¿Deseas permitir el uso del giroscopio para girar la imagen de fondo?');
-            if (confirmacion) {
-                GiroActivado = true;
-                BotonGiros.textContent = 'Girar Imagen Sí';
-                alert('El uso del giroscopio ha sido habilitado.');                
-            } else {
-                alert('Has rechazado el uso del giroscopio.');
-            }
-        } else {
-            GiroActivado = false;
-            BotonGiros.textContent = 'Girar Imagen No';
-            alert('El uso del giroscopio ha sido deshabilitado.');
+            ReproducirMusica();
         }
     });    
-    
-    function Giroscopio_Movil(){
-        if (window.DeviceOrientationEvent) {
-            window.addEventListener('deviceorientation', event => {
-                const rotation = event.gamma;
-                if (rotation !== null) {
-                    document.querySelectorAll('.card').forEach(card => {
-                        card.style.transform = `rotateY(${rotation}deg)`;
-                    });
-                }
-            });
-        } else {
-            alert('DeviceOrientationEvent no está soportado en este dispositivo/navegador.');
-        }
-    }
+
+    BotonInicio.addEventListener('click', () => {
+        SonidoBoton();
+        MusicaActiva = false;        
+        BotonMusica.textContent = 'Musica';
+        ResetearJuego();
+        JuegoIniciado = false;
+        ManejoMenus(0);
+    })
 });
