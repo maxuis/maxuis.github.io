@@ -1,7 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {    
-    const TableroJuego = document.getElementById('Tablero-Juego');
-    const isMobile = /Mobi|Android/i.test(navigator.userAgent);
-
+    const TableroJuego = document.getElementById('Tablero-Juego');    
     // Menus
     const MenuInicio = document.getElementById('Menu-Inicio');
     const MenuModo = document.getElementById('Modo-Juego')
