@@ -43,22 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (navigator.vibrate) {
             navigator.vibrate(duration);
         }
-    }
-
-    function Giroscopio_Movil(){
-        if (window.DeviceOrientationEvent) {
-            window.addEventListener('deviceorientation', event => {
-                const rotation = event.gamma;
-                if (rotation !== null) {
-                    document.querySelectorAll('.card').forEach(card => {
-                        card.style.transform = `rotateY(${rotation}deg)`;                        
-                    });
-                }
-            });
-        } else {
-            alert('DeviceOrientationEvent no está soportado en este dispositivo/navegador.');
-        }
-    }
+    }    
 
     function ReproducirMusica() {
         // Verificar si la música está habilitada
@@ -126,26 +111,28 @@ document.addEventListener('DOMContentLoaded', () => {
         // Modo Movil requiere giroscopio
         if (ModoJuego === "MODO MOVIL"){  
             if (isMobile) {
+                alert("IsMobile: " + isMobile);
                 card.forEach(card => {
                     card.addEventListener('touchstart', () => {
                         card.classList.add('white');
+                        alert("card: " + card);
                     });
                 });
                 
-                function handleOrientation(event) {
+                function DetectarOrientacionEjes(event) {
+                    alert("Detectando ejes: gamma ( " + gamma + " ) | beta ( " + beta + " ) | alpha ( " + alpha + " )");
                     const gamma = event.gamma; 
                     const beta = event.beta;   
                     const alpha = event.alpha;                 
-                    if ((Math.abs(gamma) > 20) || (Math.abs(beta) > 20) || (Math.abs(alpha) > 20)) {                        
-                        const cardToFlip = Array.from(cartas).find(carta => !carta.classList.contains('flipped'));
-                        if (cardToFlip) {
-                            InvertirCarta(cardToFlip, value);
-                        }
+                    if ((Math.abs(gamma) > 20) || (Math.abs(beta) > 20) || (Math.abs(alpha) > 20)) {             
+                        alert(">> Detectado <<");
+                        alert(">> invirtiendo <<");
+                        InvertirCarta(card, value);
                     }
                 } 
 
                 if (window.DeviceOrientationEvent) {
-                    window.addEventListener('deviceorientation', handleOrientation, true);
+                    window.addEventListener('deviceorientation', DetectarOrientacionEjes, true);
                 } else {
                     console.log("DeviceOrientationEvent is not supported");
                 }
@@ -202,12 +189,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 MenuJuego.style.display = 'none' // 2
                 MenuAjustes.style.display = 'block' // 3
                 break;
-            case 4:
-                MenuInicio.style.display = 'none' // 0
-                MenuModo.style.display = 'none' // 1
-                MenuJuego.style.display = 'none' // 2
-                MenuAjustes.style.display = 'none' // 3
-                break;
         }
     }
 
@@ -256,7 +237,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ManejoMenus(3);
         }
         if (ModoJuego === "MODO MOVIL"){
-            ManejoMenus(4);
+            ManejoMenus(3);
         }
     })
 
