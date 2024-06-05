@@ -1,5 +1,7 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => {    
     const TableroJuego = document.getElementById('Tablero-Juego');
+    const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+
     // Menus
     const MenuInicio = document.getElementById('Menu-Inicio');
     const MenuModo = document.getElementById('Modo-Juego')
@@ -49,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const rotation = event.gamma;
                 if (rotation !== null) {
                     document.querySelectorAll('.card').forEach(card => {
-                        card.style.transform = `rotateY(${rotation}deg)`;
+                        card.style.transform = `rotateY(${rotation}deg)`;                        
                     });
                 }
             });
@@ -86,26 +88,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function CrearCarta(value) {
-        const card = document.createElement('div');
-        card.classList.add('card');
-        card.innerHTML = `
-            <div class="front"></div>
-            <div class="back">${value}</div>
-        `;
-        // Momo pcc solo requiere clik
-        if (ModoJuego === "MODO PC"){
-            card.addEventListener('click', () => InvertirCarta(card, value));
-        }
-        // Modo Movil requiere giroscopio
-        if (ModoJuego === "MODO MOVIL"){
-            Giroscopio_Movil();
-        }
-        return card;
-    }
-
     function InvertirCarta(card, value) {
-        SonidoBoton();
+        SonidoBoton();        
         if (CartasVolteadas.length < 2 && !card.classList.contains('flipped')) {
             card.classList.add('flipped');
             CartasVolteadas.push({ card, value });
@@ -126,7 +110,49 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         }
-    }    
+    } 
+
+    function CrearCarta(value) {
+        const card = document.createElement('div');
+        card.classList.add('card');
+        card.innerHTML = `
+            <div class="front"></div>
+            <div class="back">${value}</div>
+        `;
+        // Modo pcc solo requiere clik
+        if (ModoJuego === "MODO PC"){            
+            card.addEventListener('click', () => InvertirCarta(card, value));            
+        }
+        // Modo Movil requiere giroscopio
+        if (ModoJuego === "MODO MOVIL"){  
+            if (isMobile) {
+                card.forEach(card => {
+                    card.addEventListener('touchstart', () => {
+                        card.classList.add('white');
+                    });
+                });
+                
+                function handleOrientation(event) {
+                    const gamma = event.gamma; 
+                    const beta = event.beta;   
+                    const alpha = event.alpha;                 
+                    if ((Math.abs(gamma) > 20) || (Math.abs(beta) > 20) || (Math.abs(alpha) > 20)) {                        
+                        const cardToFlip = Array.from(cartas).find(carta => !carta.classList.contains('flipped'));
+                        if (cardToFlip) {
+                            InvertirCarta(cardToFlip, value);
+                        }
+                    }
+                } 
+
+                if (window.DeviceOrientationEvent) {
+                    window.addEventListener('deviceorientation', handleOrientation, true);
+                } else {
+                    console.log("DeviceOrientationEvent is not supported");
+                }
+            }                                               
+        }
+        return card;
+    }       
 
     function ResetearJuego() {                      
         CartasEncontradas = 0;
