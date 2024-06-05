@@ -109,16 +109,11 @@ document.addEventListener('DOMContentLoaded', () => {
             card.addEventListener('click', () => InvertirCarta(card, value));            
         }
         // Modo Movil requiere giroscopio
-        if (ModoJuego === "MODO MOVIL"){  
-            if (isMobile) {
-                alert("IsMobile: " + isMobile);
-                card.forEach(card => {
-                    card.addEventListener('touchstart', () => {
-                        card.classList.add('white');
-                        alert("card: " + card);
-                    });
-                });
-                
+        if (ModoJuego === "MODO MOVIL"){ 
+            card.addEventListener('click', () =>{
+                card.classList.add('white');
+                alert("card: " + card);
+
                 function DetectarOrientacionEjes(event) {
                     alert("Detectando ejes: gamma ( " + gamma + " ) | beta ( " + beta + " ) | alpha ( " + alpha + " )");
                     const gamma = event.gamma; 
@@ -136,7 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     console.log("DeviceOrientationEvent is not supported");
                 }
-            }                                               
+            });                                                           
         }
         return card;
     }       
