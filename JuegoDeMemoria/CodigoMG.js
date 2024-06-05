@@ -1,5 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {    
     const TableroJuego = document.getElementById('Tablero-Juego');
+    const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+
     // Menus
     const MenuInicio = document.getElementById('Menu-Inicio');
     const MenuModo = document.getElementById('Modo-Juego')
@@ -72,28 +74,73 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function InvertirCarta(card, value) {
-        SonidoBoton();        
-        if (CartasVolteadas.length < 2 && !card.classList.contains('flipped')) {
-            card.classList.add('flipped');
-            CartasVolteadas.push({ card, value });
-            Vibrar(200);
-
-            if (CartasVolteadas.length === 2) {
-                if (CartasVolteadas[0].value === CartasVolteadas[1].value) {
-                    CartasEncontradas++;
-                    CartasVolteadas = [];
-                    SonidoBoton();                    
-                } else {
-                    setTimeout(() => {
-                        SonidoBoton();  
-                        Vibrar(250);
-                        CartasVolteadas.forEach(item => item.card.classList.remove('flipped'));
-                        CartasVolteadas = [];
-                    }, 1000);
+        SonidoBoton();  
+        switch(ModoJuego){
+            case "MODO PC":
+                if (CartasVolteadas.length < 2 && !card.classList.contains('flipped')) {
+                    card.classList.add('flipped');
+                    CartasVolteadas.push({ card, value });
+                    Vibrar(200);
+        
+                    if (CartasVolteadas.length === 2) {
+                        if (CartasVolteadas[0].value === CartasVolteadas[1].value) {
+                            CartasEncontradas++;
+                            CartasVolteadas = [];
+                            SonidoBoton();                    
+                        } else {
+                            setTimeout(() => {
+                                SonidoBoton();  
+                                Vibrar(250);                                
+                                CartasVolteadas.forEach(item => {
+                                    item.card.style.border = '0px solid red';
+                                    item.card.classList.remove('flipped');
+                                });
+                                CartasVolteadas = [];                        
+                            }, 1000);
+                        }
+                    }
                 }
-            }
-        }
-    } 
+                break;
+            case "MODO MOVIL":
+                function DetectarOrientacionEjes(event) {
+                    const gamma = event.gamma; 
+                    const beta = event.beta;   
+                    const alpha = event.alpha;                 
+                    if ((Math.abs(gamma) > 20) || (Math.abs(beta) > 20) || (Math.abs(alpha) > 20)) {                                     
+                        if (CartasVolteadas.length < 2 && !card.classList.contains('flipped')) {
+                            card.classList.add('flipped');
+                            CartasVolteadas.push({ card, value });
+                            Vibrar(200);
+    
+                            if (CartasVolteadas.length === 2) {
+                                if (CartasVolteadas[0].value === CartasVolteadas[1].value) {
+                                    CartasEncontradas++;
+                                    CartasVolteadas = [];
+                                    SonidoBoton();                    
+                                } else {
+                                    setTimeout(() => {
+                                        SonidoBoton();  
+                                        Vibrar(250);
+                                        CartasVolteadas.forEach(item => {
+                                            item.card.style.border = '0px solid red';
+                                            item.card.classList.remove('flipped');
+                                        });
+                                        CartasVolteadas = [];
+                                    }, 1000);
+                                }
+                            }
+                        }
+                    }
+                }
+    
+                if (window.DeviceOrientationEvent) {
+                    window.addEventListener('deviceorientation', DetectarOrientacionEjes, true);
+                } else {
+                    console.log("DeviceOrientationEvent is not supported");
+                }
+                break;
+        }              
+    }
 
     function CrearCarta(value) {
         const card = document.createElement('div');
@@ -102,30 +149,15 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="front"></div>
             <div class="back">${value}</div>
         `;
-        // Modo pcc solo requiere clik
-        if (ModoJuego === "MODO PC"){            
-            card.addEventListener('click', () => InvertirCarta(card, value));            
-        }
-        // Modo Movil requiere giroscopio
-        if (ModoJuego === "MODO MOVIL"){ 
-            card.addEventListener('click', () =>{
-                
-                function DetectarOrientacionEjes(event) {                    
-                    const gamma = event.gamma; 
-                    const beta = event.beta;   
-                    const alpha = event.alpha;                 
-                    if ((Math.abs(gamma) > 20) || (Math.abs(beta) > 20) || (Math.abs(alpha) > 20)) {                                     
-                        InvertirCarta(card, value);
-                    }
-                } 
-
-                if (window.DeviceOrientationEvent) {
-                    window.addEventListener('deviceorientation', DetectarOrientacionEjes, true);
-                } else {
-                    console.log("DeviceOrientationEvent is not supported");
-                }
-            });                                                         
-        }
+        card.addEventListener('click', () => {
+            card.style.border = '2px solid red';
+            card.style.transform = 'scale(1.001)';
+            card.style.transition = 'all 0.2s ease';
+    
+            setTimeout(() => {
+                InvertirCarta(card, value);
+            }, 200); // 
+        });                   
         return card;
     }       
 
