@@ -1,7 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {    
     const TableroJuego = document.getElementById('Tablero-Juego');
-    const isMobile = /Mobi|Android/i.test(navigator.userAgent);
-
     // Menus
     const MenuInicio = document.getElementById('Menu-Inicio');
     const MenuModo = document.getElementById('Modo-Juego')
@@ -112,14 +110,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (ModoJuego === "MODO MOVIL"){ 
             card.addEventListener('click', () =>{
                 
-                function DetectarOrientacionEjes(event) {
-                    alert("Detectando ejes: gamma ( " + gamma + " ) | beta ( " + beta + " ) | alpha ( " + alpha + " )");
+                function DetectarOrientacionEjes(event) {                    
                     const gamma = event.gamma; 
                     const beta = event.beta;   
                     const alpha = event.alpha;                 
-                    if ((Math.abs(gamma) > 20) || (Math.abs(beta) > 20) || (Math.abs(alpha) > 20)) {             
-                        alert(">> Detectado <<");
-                        alert(">> invirtiendo <<");
+                    if ((Math.abs(gamma) > 20) || (Math.abs(beta) > 20) || (Math.abs(alpha) > 20)) {                                     
                         InvertirCarta(card, value);
                     }
                 } 
@@ -129,34 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     console.log("DeviceOrientationEvent is not supported");
                 }
-            }); 
-            if (isMobile) {
-                alert("IsMobile: " + isMobile);
-                card.forEach(card => {
-                    card.addEventListener('touchstart', () => {
-                        card.classList.add('white');
-                        alert("card: " + card);
-                    });
-                });
-                
-                function DetectarOrientacionEjes(event) {
-                    alert("Detectando ejes: gamma ( " + gamma + " ) | beta ( " + beta + " ) | alpha ( " + alpha + " )");
-                    const gamma = event.gamma; 
-                    const beta = event.beta;   
-                    const alpha = event.alpha;                 
-                    if ((Math.abs(gamma) > 20) || (Math.abs(beta) > 20) || (Math.abs(alpha) > 20)) {             
-                        alert(">> Detectado <<");
-                        alert(">> invirtiendo <<");
-                        InvertirCarta(card, value);
-                    }
-                } 
-
-                if (window.DeviceOrientationEvent) {
-                    window.addEventListener('deviceorientation', DetectarOrientacionEjes, true);
-                } else {
-                    console.log("DeviceOrientationEvent is not supported");
-                }
-            }                                               
+            });                                                         
         }
         return card;
     }       
