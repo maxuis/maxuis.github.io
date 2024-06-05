@@ -1,34 +1,43 @@
 document.addEventListener('DOMContentLoaded', () => {    
-    const TableroJuego = document.getElementById('Tablero-Juego');
-    const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+    // VARIABLES GLOBALES
+    const TableroJuego = document.getElementById('Tablero-Juego');    
+    // MENUS
+    const MenuInicio = document.getElementById('Menu-Inicio'); // Menú de inicio del juego
+    const MenuModo = document.getElementById('Modo-Juego'); // Menú de selección de modo de juego
+    const MenuJuego = document.getElementById('Juego'); // Menú del juego principal
+    const MenuAjustes = document.getElementById('Menu-Ajustes'); // Menú de ajustes
 
-    // Menus
-    const MenuInicio = document.getElementById('Menu-Inicio');
-    const MenuModo = document.getElementById('Modo-Juego')
-    const MenuJuego = document.getElementById('Juego');
-    const MenuAjustes = document.getElementById('Menu-Ajustes');    
-    // Botones Inicio
-    const BotonJugar = document.getElementById('Boton-Jugar'); 
-    // Botones Modo
-    const BotonPC = document.getElementById('Boton-PC');
-    const BotonMovil = document.getElementById('Boton-Movil');     
-    // Botones Juego
-    const BotonResetear = document.getElementById('Boton-Resetear');
-    const BotonAjustes = document.getElementById('Boton-Ajustes');
-    // Botones Ajustes
-    const BotonRegresar = document.getElementById('Boton-Regresar');
-    const BotonMusica =  document.getElementById('Boton-Musica');
-    const BotonInicio = document.getElementById('Boton-Inicio');              
-    let Cartas = [];
-    let CartasVolteadas = [];
-    let CartasEncontradas = 0;
-    let UltimaCartaVolteada = false;
-    let GiroActivado = false;
-    let MusicaActiva = false;
-    let JuegoIniciado = false;
-    let ModoJuego = "Nada"
-    let IndiceMenu = 0;
+    // BOTONES DE INICIO
+    const BotonJugar = document.getElementById('Boton-Jugar'); // Botón para comenzar el juego
+
+    // BOTONES DE MODO
+    const BotonPC = document.getElementById('Boton-PC'); // Botón para seleccionar modo PC
+    const BotonMovil = document.getElementById('Boton-Movil'); // Botón para seleccionar modo móvil
+
+    // BOTONES DE JUEGO
+    const BotonResetear = document.getElementById('Boton-Resetear'); // Botón para reiniciar el juego
+    const BotonAjustes = document.getElementById('Boton-Ajustes'); // Botón para acceder a los ajustes
+
+    // BOTONES DE AJUSTES
+    const BotonRegresar = document.getElementById('Boton-Regresar'); // Botón para regresar al menú de juego
+    const BotonMusica =  document.getElementById('Boton-Musica'); // Botón para activar/desactivar la música
+    const BotonInicio = document.getElementById('Boton-Inicio'); // Botón para regresar al inicio del juego
+
+    // VARIABLES DEL JUEGO
+    let Cartas = []; // Array de cartas
+    let CartasVolteadas = []; // Array de cartas volteadas
+    let CartasEncontradas = 0; // Número de cartas encontradas
+    let UltimaCartaVolteada = false; // Última carta volteada
+    let GiroActivado = false; // Estado del giroscopio
+    let MusicaActiva = false; // Estado de la música
+    let JuegoIniciado = false; // Estado del juego
+    let ModoJuego = "Nada"; // Modo de juego seleccionado
+    let IndiceMenu = 0; // Índice del menú seleccionado
+
+    // Valores de las cartas
     const ValorCartas = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+
+    // Set de cartas
     let cardSet = ValorCartas.concat(ValorCartas);
     const Musicas = [
         new Audio('Sonidos/Sonido1.mp3'),
@@ -74,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function InvertirCarta(card, value) {
-        SonidoBoton();  
+        SonidoBoton();
         switch(ModoJuego){
             case "MODO PC":
                 if (CartasVolteadas.length < 2 && !card.classList.contains('flipped')) {
@@ -132,7 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                     }
                 }
-    
+                
                 if (window.DeviceOrientationEvent) {
                     window.addEventListener('deviceorientation', DetectarOrientacionEjes, true);
                 } else {
