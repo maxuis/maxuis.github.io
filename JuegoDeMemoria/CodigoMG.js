@@ -52,8 +52,19 @@ document.addEventListener('DOMContentLoaded', () => {
         if (navigator.vibrate) {
             navigator.vibrate(duration);
         }
-    }    
+    }           
 
+    // Añadir evento de orientación del dispositivo
+    function Evento_Giroscopio(){
+        if (window.DeviceOrientationEvent) {
+            window.addEventListener('deviceorientation', DetectarOrientacionEjes, true);
+        } else {
+            console.log("DeviceOrientationEvent no es soportado");
+        } 
+    }    
+    if (ModoJuego === "MODO MOVIL"){
+        Evento_Giroscopio();
+    }    
     function ReproducirMusica() {
         // Verificar si la música está habilitada
         if (MusicaActiva) {
@@ -89,7 +100,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (CartasVolteadas.length < 2 && !card.classList.contains('flipped')) {
                     card.classList.add('flipped');
                     CartasVolteadas.push({ card, value });
-                    Vibrar(200);
+                    if (ModoJuego === "MODO MOVIL"){
+                        Vibrar(200);
+                    }
         
                     if (CartasVolteadas.length === 2) {
                         if (CartasVolteadas[0].value === CartasVolteadas[1].value) {
@@ -99,7 +112,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         } else {
                             setTimeout(() => {
                                 SonidoBoton();  
-                                Vibrar(250);                                
+                                if (ModoJuego === "MODO MOVIL"){
+                                    Vibrar(200);
+                                }                                
                                 CartasVolteadas.forEach(item => {
                                     item.card.style.border = '0px solid red';
                                     item.card.classList.remove('flipped');
@@ -110,43 +125,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 }
                 break;
-            case "MODO MOVIL":
+            case "MODO MOVIL":   
+                // Detección de la orientación del dispositivo
                 function DetectarOrientacionEjes(event) {
-                    const gamma = event.gamma; 
-                    const beta = event.beta;   
-                    const alpha = event.alpha;                 
-                    if ((Math.abs(gamma) > 20) || (Math.abs(beta) > 20) || (Math.abs(alpha) > 20)) {                                     
-                        if (CartasVolteadas.length < 2 && !card.classList.contains('flipped')) {
-                            card.classList.add('flipped');
-                            CartasVolteadas.push({ card, value });
-                            Vibrar(200);
-    
-                            if (CartasVolteadas.length === 2) {
-                                if (CartasVolteadas[0].value === CartasVolteadas[1].value) {
-                                    CartasEncontradas++;
-                                    CartasVolteadas = [];
-                                    SonidoBoton();                    
-                                } else {
-                                    setTimeout(() => {
-                                        SonidoBoton();  
-                                        Vibrar(250);
-                                        CartasVolteadas.forEach(item => {
-                                            item.card.style.border = '0px solid red';
-                                            item.card.classList.remove('flipped');
-                                        });
-                                        CartasVolteadas = [];
-                                    }, 1000);
-                                }
-                            }
-                        }
+                    const gamma = event.gamma;
+                    const beta = event.beta;
+                    const alpha = event.alpha;
+                    if ((Math.abs(gamma) > 20) || (Math.abs(beta) > 20) || (Math.abs(alpha) > 20)) {
+                        InvertirCarta(card, value);
                     }
                 }
-                
-                if (window.DeviceOrientationEvent) {
-                    window.addEventListener('deviceorientation', DetectarOrientacionEjes, true);
-                } else {
-                    console.log("DeviceOrientationEvent is not supported");
-                }
+                Evento_Giroscopio();
+                DetectarOrientacionEjes();
                 break;
         }              
     }
@@ -159,7 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="back">${value}</div>
         `;
         card.addEventListener('click', () => {
-            card.style.border = '2px solid red';
+            card.style.border = '1px solid red';
             card.style.transform = 'scale(1.001)';
             card.style.transition = 'all 0.2s ease';
     
@@ -177,7 +167,9 @@ document.addEventListener('DOMContentLoaded', () => {
         Cartas.forEach(card => card.classList.remove('flipped'));
         setTimeout(() => {
             TableroJuego.innerHTML = '';
-            Vibrar(250);
+            if (ModoJuego === "MODO MOVIL"){
+                Vibrar(250);
+            }
             IniciarJuego();
         }, 500);
     }
