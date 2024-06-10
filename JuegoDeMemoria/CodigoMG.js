@@ -154,6 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="back">${Valor}</div>
         `;
         Carta.addEventListener('click', () => {
+            Debug.textContent = "Carta Seleccionada";
             Carta.style.border = '1px solid red';
             Carta.style.transform = 'scale(1.001)';
             Carta.style.transition = 'all 0.2s ease';
