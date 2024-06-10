@@ -86,12 +86,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }         
 
     // Detección de la orientación del dispositivo
-    function DetectarOrientacionEjes(event, Carta, Valor) {
+    function DetectarOrientacionEjes(event) {
         const gamma = event.gamma;
         const beta = event.beta;
         const alpha = event.alpha;
         if ((Math.abs(gamma) > 20) || (Math.abs(beta) > 20) || (Math.abs(alpha) > 20)) {
-            InvertirCarta(Carta, Valor);
+            if (CartasVolteadas.length < 2 && !UltimaCartaVolteada.classList.contains('flipped')) {
+                InvertirCarta(UltimaCartaVolteada, UltimaCartaVolteada.dataset.valor);
+            }
         }
     }
 
@@ -104,6 +106,9 @@ document.addEventListener('DOMContentLoaded', () => {
         } 
     }    
 
+    if (ModoJuego === "MODO MOVIL"){
+        Evento_Giroscopio();
+    }
     function ReproducirMusica() {
         // Verificar si la música está habilitada
         if (MusicaActiva) {
@@ -143,16 +148,11 @@ document.addEventListener('DOMContentLoaded', () => {
             Carta.style.border = '1px solid red';
             Carta.style.transform = 'scale(1.001)';
             Carta.style.transition = 'all 0.2s ease';
-            switch(ModoJuego){
-                case "MODO PC":
-                    setTimeout(() => {
-                        InvertirCarta(Carta, Valor);
-                    }, 200); // Modo PC
-                    break;
-                case "MODO MOVIL":
-                    Evento_Giroscopio();
-                    break;
-            }            
+            if (ModoJuego === "MODO PC"){
+                setTimeout(() => {
+                    InvertirCarta(Carta, Valor);
+                }, 200); // Modo PC
+            }
         });                   
         return Carta;
     }       
