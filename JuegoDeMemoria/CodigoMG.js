@@ -52,7 +52,48 @@ document.addEventListener('DOMContentLoaded', () => {
         if (navigator.vibrate) {
             navigator.vibrate(duration);
         }
-    }           
+    }  
+    
+    function InvertirCarta(Carta, Valor) {
+        SonidoBoton();
+        if (CartasVolteadas.length < 2 && !Carta.classList.contains('flipped')) {
+            Carta.classList.add('flipped');
+            CartasVolteadas.push({ card: Carta, value: Valor });
+            if (ModoJuego === "MODO MOVIL"){
+                Vibrar(200);
+            }
+
+            if (CartasVolteadas.length === 2) {
+                if (CartasVolteadas[0].value === CartasVolteadas[1].value) {
+                    CartasEncontradas++;
+                    CartasVolteadas = [];
+                    SonidoBoton();                    
+                } else {
+                    setTimeout(() => {
+                        SonidoBoton();  
+                        if (ModoJuego === "MODO MOVIL"){
+                            Vibrar(200);
+                        }                                
+                        CartasVolteadas.forEach(item => {
+                            item.card.style.border = '0px solid red';
+                            item.card.classList.remove('flipped');
+                        });
+                        CartasVolteadas = [];                        
+                    }, 1000);
+                }
+            }
+        }
+    }         
+
+    // Detección de la orientación del dispositivo
+    function DetectarOrientacionEjes(event, Carta, Valor) {
+        const gamma = event.gamma;
+        const beta = event.beta;
+        const alpha = event.alpha;
+        if ((Math.abs(gamma) > 20) || (Math.abs(beta) > 20) || (Math.abs(alpha) > 20)) {
+            InvertirCarta(Carta, Valor);
+        }
+    }
 
     // Añadir evento de orientación del dispositivo
     function Evento_Giroscopio(){
@@ -62,9 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log("DeviceOrientationEvent no es soportado");
         } 
     }    
-    if (ModoJuego === "MODO MOVIL"){
-        Evento_Giroscopio();
-    }    
+
     function ReproducirMusica() {
         // Verificar si la música está habilitada
         if (MusicaActiva) {
@@ -91,73 +130,31 @@ document.addEventListener('DOMContentLoaded', () => {
             const j = Math.floor(Math.random() * (i + 1));
             [array[i], array[j]] = [array[j], array[i]];
         }
-    }
+    }    
 
-    function InvertirCarta(card, value) {
-        SonidoBoton();
-        switch(ModoJuego){
-            case "MODO PC":
-                if (CartasVolteadas.length < 2 && !card.classList.contains('flipped')) {
-                    card.classList.add('flipped');
-                    CartasVolteadas.push({ card, value });
-                    if (ModoJuego === "MODO MOVIL"){
-                        Vibrar(200);
-                    }
-        
-                    if (CartasVolteadas.length === 2) {
-                        if (CartasVolteadas[0].value === CartasVolteadas[1].value) {
-                            CartasEncontradas++;
-                            CartasVolteadas = [];
-                            SonidoBoton();                    
-                        } else {
-                            setTimeout(() => {
-                                SonidoBoton();  
-                                if (ModoJuego === "MODO MOVIL"){
-                                    Vibrar(200);
-                                }                                
-                                CartasVolteadas.forEach(item => {
-                                    item.card.style.border = '0px solid red';
-                                    item.card.classList.remove('flipped');
-                                });
-                                CartasVolteadas = [];                        
-                            }, 1000);
-                        }
-                    }
-                }
-                break;
-            case "MODO MOVIL":   
-                // Detección de la orientación del dispositivo
-                function DetectarOrientacionEjes(event) {
-                    const gamma = event.gamma;
-                    const beta = event.beta;
-                    const alpha = event.alpha;
-                    if ((Math.abs(gamma) > 20) || (Math.abs(beta) > 20) || (Math.abs(alpha) > 20)) {
-                        InvertirCarta(card, value);
-                    }
-                }
-                Evento_Giroscopio();
-                DetectarOrientacionEjes();
-                break;
-        }              
-    }
-
-    function CrearCarta(value) {
-        const card = document.createElement('div');
-        card.classList.add('card');
-        card.innerHTML = ` 
+    function CrearCarta(Valor) {
+        const Carta = document.createElement('div');
+        Carta.classList.add('card');
+        Carta.innerHTML = ` 
             <div class="front"></div>
-            <div class="back">${value}</div>
+            <div class="back">${Valor}</div>
         `;
-        card.addEventListener('click', () => {
-            card.style.border = '1px solid red';
-            card.style.transform = 'scale(1.001)';
-            card.style.transition = 'all 0.2s ease';
-    
-            setTimeout(() => {
-                InvertirCarta(card, value);
-            }, 200); // 
+        Carta.addEventListener('click', () => {
+            Carta.style.border = '1px solid red';
+            Carta.style.transform = 'scale(1.001)';
+            Carta.style.transition = 'all 0.2s ease';
+            switch(ModoJuego){
+                case "MODO PC":
+                    setTimeout(() => {
+                        InvertirCarta(Carta, Valor);
+                    }, 200); // Modo PC
+                    break;
+                case "MODO MOVIL":
+                    Evento_Giroscopio();
+                    break;
+            }            
         });                   
-        return card;
+        return Carta;
     }       
 
     function ResetearJuego() {                      
