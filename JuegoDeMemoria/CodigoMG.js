@@ -32,7 +32,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let MusicaActiva = false; // Estado de la música
     let JuegoIniciado = false; // Estado del juego
     let ModoJuego = "Nada"; // Modo de juego seleccionado
-    let IndiceMenu = 0; // Índice del menú seleccionado
+    let IndiceMenu = 0; // Índice del menú 
+    
+    const Debug = document.getElementById('Debug');
 
     // Valores de las cartas
     const ValorCartas = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
@@ -87,11 +89,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Detección de la orientación del dispositivo
     function DetectarOrientacionEjes(event) {
+        Debug.textContent = "Detectar orientacion ejes";
         const gamma = event.gamma;
         const beta = event.beta;
         const alpha = event.alpha;
         if ((Math.abs(gamma) > 20) || (Math.abs(beta) > 20) || (Math.abs(alpha) > 20)) {
+            Debug.textContent = "Verificando orientacion";
             if (CartasVolteadas.length < 2 && !UltimaCartaVolteada.classList.contains('flipped')) {
+                Debug.textContent = "Se invierte carta";
                 InvertirCarta(UltimaCartaVolteada, UltimaCartaVolteada.dataset.valor);
             }
         }
@@ -99,9 +104,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Añadir evento de orientación del dispositivo
     function Evento_Giroscopio(){
+        Debug.textContent = "Iniciando GirosCopio";
         if (window.DeviceOrientationEvent) {
+            Debug.textContent = "Entrada GirosCopio detectado";
             window.addEventListener('deviceorientation', DetectarOrientacionEjes, true);
         } else {
+            Debug.textContent = "Giroscopio No soportado";
             console.log("DeviceOrientationEvent no es soportado");
         } 
     }    
@@ -109,6 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (ModoJuego === "MODO MOVIL"){
         Evento_Giroscopio();
     }
+
     function ReproducirMusica() {
         // Verificar si la música está habilitada
         if (MusicaActiva) {
@@ -157,7 +166,8 @@ document.addEventListener('DOMContentLoaded', () => {
         return Carta;
     }       
 
-    function ResetearJuego() {                      
+    function ResetearJuego() {
+        Debug.textContent = "Reseteado";
         CartasEncontradas = 0;
         CartasVolteadas = [];
         UltimaCartaVolteada = null;
@@ -165,17 +175,21 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
             TableroJuego.innerHTML = '';
             if (ModoJuego === "MODO MOVIL"){
+                Debug.textContent = "Vibrar";
                 Vibrar(250);
             }
             IniciarJuego();
+            Debug.textContent = "Iniciar Juego";
         }, 500);
     }
 
     function IniciarJuego() { 
-        if (JuegoIniciado === false){            
+        Debug.textContent = "Juego iniciado";
+        if (JuegoIniciado === false){
+            Debug.textContent = "Juego es TRUE";            
             BarajarCarta(cardSet);
-            Cartas = cardSet.map(value => CrearCarta(value));
-            Cartas.forEach(card => TableroJuego.appendChild(card));
+            Cartas = cardSet.map(Valor => CrearCarta(Valor));
+            Cartas.forEach(Carta => TableroJuego.appendChild(Carta));
             JuegoIniciado = true;  // Empezar Juego        
         }                           
     }
