@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego de Memoria</title>
+    <link rel="manifest" href="ManifiestoMG.json">
+    <link rel="stylesheet" href="EstiloMG.css">
+</head>
+<body>
+    <script>
+        if (typeof navigator.serviceWorker !== 'undefined') {
+          navigator.serviceWorker.register('swMG.js')
+        }
+    </script>   
+    <!-- INICIO -->        
+    <div id="Menu-Inicio" style="display: block;">
+        <h1 class="text-with-border-one">Juego de Memoria</h1>
+        <button id="Boton-Jugar" class="text-with-border-tree"> Jugar </button>
+    </div>
+    <!-- MODOS -->
+    <div id="Modo-Juego" style="display: none;">
+        <h1 class="text-with-border-one">SELECCIONA TU MODO DE JUEGO</h1>
+        <button id="Boton-PC" class="text-with-border-tree"> Jugar con PC </button>
+        <button id="Boton-Movil" class="text-with-border-tree"> Jugar con Movil </button>
+    </div>
+    <!-- JUEGO -->
+    <div id="Juego" style="display: none;">
+        <h1 class="text-with-border-one">Juego de Memoria</h1>
+        <h2 class="text-with-border-two">Encuentra Las Cartas Pares</h2>
+        <div id="Tablero-Juego">
+            <!-- Las cartas se generarán dinámicamente aquí con JS. -->
+        </div>
+        <h3 id="Debug">Debug</h3>
+        <button id="Boton-Resetear" class="text-with-border-tree"> Resetear Juego </button>
+        <button id="Boton-Ajustes" class="text-with-border-tree"> Ajustes </button>        
+    </div>  
+    <!-- AJUSTES -->
+    <div id = "Menu-Ajustes" style="display: none;">
+        <h1 class="text-with-border-one">Ajustes</h1>
+        <button id="Boton-Regresar" class="text-with-border-tree"> Regresar </button>     
+        <button id="Boton-Musica" class="text-with-border-tree"> Musica </button>              
+        <button id="Boton-Inicio" class="text-with-border-tree"> Inicio </button>     
+    </div>  
+    <!-- IMAGEN DE FONDO -->  
+    <div id="Imagen-Fondo"></div>    
+    <script src="CodigoMG.js"></script>
+</body>
+</html>
