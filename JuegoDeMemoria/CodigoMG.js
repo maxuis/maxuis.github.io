@@ -92,17 +92,20 @@ document.addEventListener('DOMContentLoaded', () => {
             window.addEventListener('deviceorientation', function(event) {
                 if (event.alpha !== null || event.beta !== null || event.gamma !== null) {
                     console.log("Giroscopio disponible");
-                    PosibilidadGiros = "GIROSCOPIO DISPONIBLE"
+                    PosibilidadGiros = "GIROSCOPIO DISPONIBLE";
+                    alert("Tienes disponible Giroscopio");
                     // Giroscopio disponible, puedes activar tu lógica aquí
                 } else {
                     console.log("Giroscopio no disponible");
                     PosibilidadGiros = "GIROSCOPIO NO DISPONIBLE"
+                    alert("No tienes disponible el Giroscopio");
                     // Giroscopio no disponible, manejar adecuadamente
                 }
             }, { once: true });
         } else {
             console.log("DeviceOrientationEvent no soportado");
-            PosibilidadGiros = "GIROSCOPIO NO SOPORTADO"
+            PosibilidadGiros = "GIROSCOPIO NO SOPORTADO";
+            alert("Tu equipo no soporta tecnología Giroscopio");
             // DeviceOrientationEvent no es soportado, manejar adecuadamente
         }
     }
@@ -275,9 +278,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!GiroActivado) {
             let confirmacion = confirm('¿Deseas permitir el uso del giroscopio para girar las cartas del jueugo?');
             if (confirmacion) {
-                GiroActivado = true;                
-                alert('El uso del giroscopio ha sido habilitado.'); 
-                ManejoMenus(2);                  
+                GiroActivado = true;
+                if (PosibilidadGiros === "GIROSCOPIO DISPONIBLE"){
+                    ManejoMenus(2);
+                }                
             } else {
                 alert('Has rechazado el uso del giroscopio... Regresando a Inicio');                
                 ManejoMenus(0);
