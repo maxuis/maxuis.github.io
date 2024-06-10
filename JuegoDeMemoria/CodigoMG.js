@@ -32,8 +32,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let MusicaActiva = false; // Estado de la música
     let JuegoIniciado = false; // Estado del juego
     let ModoJuego = "Nada"; // Modo de juego seleccionado
-    let IndiceMenu = 0; // Índice del menú 
-    let PosibilidadGiros = "NNN"    
+    let IndiceMenu = 0; // Índice del menú seleccionado
+    let DisponibilidadGiros = "Nada"
 
     // Valores de las cartas
     const ValorCartas = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
@@ -53,13 +53,41 @@ document.addEventListener('DOMContentLoaded', () => {
         if (navigator.vibrate) {
             navigator.vibrate(duration);
         }
-    }  
-    
-    function InvertirCarta(Carta, Valor) {
+    }           
+
+    // Función para verificar la presencia del giroscopio
+    function verificarGiroscopio() {
+        if ('DeviceOrientationEvent' in window) {
+            window.addEventListener('deviceorientation', function(event) {
+                if (event.alpha !== null || event.beta !== null || event.gamma !== null) {
+                    console.log("Giroscopio disponible");
+                    DisponibilidadGiros = "GD";
+                    this.alert("Giroscopio disponible");
+                    // Giroscopio disponible
+                } else {
+                    console.log("Giroscopio no disponible");
+                    DisponibilidadGiros = "GND";
+                    this.alert("Giroscopio no disponible");                    
+                    // Giroscopio no disponible
+                }
+            }, { once: true });
+        } else {
+            DisponibilidadGiros = "GNS";
+            this.alert("Giroscopio no soportado");
+            console.log("DeviceOrientationEvent no soportado");
+            // DeviceOrientationEvent no es soportado
+        }
+    }
+
+    // Llamar a la función para verificar el giroscopio
+    verificarGiroscopio();
+
+    // Funcion para invertir las cartas
+    function InvertirCarta(card, value) {
         SonidoBoton();
-        if (CartasVolteadas.length < 2 && !Carta.classList.contains('flipped')) {
-            Carta.classList.add('flipped');
-            CartasVolteadas.push({ card: Carta, value: Valor });
+        if (CartasVolteadas.length < 2 && !card.classList.contains('flipped')) {
+            card.classList.add('flipped');
+            CartasVolteadas.push({ card, value });
             if (ModoJuego === "MODO MOVIL"){
                 Vibrar(200);
             }
@@ -83,35 +111,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     }, 1000);
                 }
             }
-        }
+        }              
     }
-
-    // Función para verificar la presencia del giroscopio
-    function verificarGiroscopio() {
-        if ('DeviceOrientationEvent' in window) {
-            window.addEventListener('deviceorientation', function(event) {
-                if (event.alpha !== null || event.beta !== null || event.gamma !== null) {
-                    console.log("Giroscopio disponible");
-                    PosibilidadGiros = "GIROSCOPIO DISPONIBLE";
-                    alert("Tienes disponible Giroscopio");
-                    // Giroscopio disponible, puedes activar tu lógica aquí
-                } else {
-                    console.log("Giroscopio no disponible");
-                    PosibilidadGiros = "GIROSCOPIO NO DISPONIBLE"
-                    alert("No tienes disponible el Giroscopio");
-                    // Giroscopio no disponible, manejar adecuadamente
-                }
-            }, { once: true });
-        } else {
-            console.log("DeviceOrientationEvent no soportado");
-            PosibilidadGiros = "GIROSCOPIO NO SOPORTADO";
-            alert("Tu equipo no soporta tecnología Giroscopio");
-            // DeviceOrientationEvent no es soportado, manejar adecuadamente
-        }
-    }
-
-    // Llamar a la función para verificar el giroscopio
-    verificarGiroscopio();
 
     // Detección de la orientación del dispositivo
     function DetectarOrientacionEjes(event) {
@@ -124,7 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     }
-
+    
     // Añadir evento de orientación del dispositivo
     function Evento_Giroscopio(){
         if (window.DeviceOrientationEvent) {
@@ -133,11 +134,9 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log("DeviceOrientationEvent no es soportado");
         } 
     }    
-
     if (ModoJuego === "MODO MOVIL"){
         Evento_Giroscopio();
-    }
-
+    }    
     function ReproducirMusica() {
         // Verificar si la música está habilitada
         if (MusicaActiva) {
@@ -166,46 +165,49 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }    
 
-    function CrearCarta(Valor) {
-        const Carta = document.createElement('div');
-        Carta.classList.add('card');
-        Carta.innerHTML = ` 
+    function CrearCarta(value) {
+        const card = document.createElement('div');
+        card.classList.add('card');
+        card.innerHTML = ` 
             <div class="front"></div>
-            <div class="back">${Valor}</div>
+            <div class="back">${value}</div>
         `;
-        Carta.addEventListener('click', () => {
-            Carta.style.border = '1px solid red';
-            Carta.style.transform = 'scale(1.001)';
-            Carta.style.transition = 'all 0.2s ease';
-            if (ModoJuego === "MODO PC"){
-                setTimeout(() => {
-                    InvertirCarta(Carta, Valor);
-                }, 200); // Modo PC
+        card.addEventListener('click', () => {
+            card.style.border = '1px solid red';
+            card.style.transform = 'scale(1.001)';
+            card.style.transition = 'all 0.2s ease';
+            
+            switch(ModoJuego){
+                case "MODO PC":
+                    setTimeout(() => {
+                        InvertirCarta(card, value);
+                    }, 200); // Modo PC
+                    break;
+                case "MODO MOVIL":
+                    switch(DisponibilidadGiros){
+                        case "GD":
+                            // Se puede utilizar el giroscopio
+                            break;
+                        case "GND":
+                            // No se tiene disponible el Giroscopio
+                            setTimeout(() => {
+                                InvertirCarta(card, value);
+                            }, 200);
+                            break;
+                        case "GNS":
+                            // No se soporta tecnología Giroscopio
+                            setTimeout(() => {
+                                InvertirCarta(card, value);
+                            }, 200);
+                            break;
+                    }
+                    break;
             }
-            if (ModoJuego === "MODO MOVIL"){                
-                switch (PosibilidadGiros){
-                    case "GIROSCOPIO DISPONIBLE":
-                        // Se puede utilizar el giroscopio
-                        break;  
-                        // En caso de que el giroscopio no esté disponible por el tipo de celular                      
-                    case "GIROSCOPIO NO DISPONIBLE":
-                        setTimeout(() => {
-                            InvertirCarta(Carta, Valor);
-                        }, 200);
-                        break;
-                    case "GIROSCOPIO NO SOPORTADO":
-                        alert("No soporta giroscopio")
-                        ManejoMenus(1);
-                        break;
-                }
-
-            }            
         });                   
-        return Carta;
+        return card;
     }       
 
-    function ResetearJuego() {
-        Debug.textContent = "Reseteado";
+    function ResetearJuego() {                      
         CartasEncontradas = 0;
         CartasVolteadas = [];
         UltimaCartaVolteada = null;
@@ -213,16 +215,13 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
             TableroJuego.innerHTML = '';
             if (ModoJuego === "MODO MOVIL"){
-                Debug.textContent = "Vibrar";
                 Vibrar(250);
             }
             IniciarJuego();
-            Debug.textContent = "Iniciar Juego";
         }, 500);
     }
 
     function IniciarJuego() { 
-        Debug.textContent = "";
         if (JuegoIniciado === false){            
             BarajarCarta(cardSet);
             Cartas = cardSet.map(value => CrearCarta(value));
@@ -276,12 +275,10 @@ document.addEventListener('DOMContentLoaded', () => {
     BotonMovil.addEventListener('click', () => {  
         ModoJuego = "MODO MOVIL"  
         if (!GiroActivado) {
-            let confirmacion = confirm('¿Deseas permitir el uso del giroscopio para girar las cartas del jueugo?');
+            let confirmacion = confirm('¿Deseas permitir el uso del giroscopio para girar las cartas del juego?');
             if (confirmacion) {
-                GiroActivado = true;
-                if (PosibilidadGiros === "GIROSCOPIO DISPONIBLE"){
-                    ManejoMenus(2);
-                }                
+                GiroActivado = true;            
+                ManejoMenus(2);                  
             } else {
                 alert('Has rechazado el uso del giroscopio... Regresando a Inicio');                
                 ManejoMenus(0);
@@ -289,7 +286,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             GiroActivado = false;
             BotonGirosCopio.textContent = 'Girar Imagen No';
-            alert('El uso del giroscopio ha sido deshabilitado. No se puede jugar en modo Movil... Regresando a Inicio');            
+            alert('El uso del giroscopio ha sido deshabilitado. No se puede juugar en modo Movil... Regresando a Inicio');            
             ManejoMenus(0);
         } 
         SonidoBoton();                   
