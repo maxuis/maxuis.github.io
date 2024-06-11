@@ -46,7 +46,30 @@ document.addEventListener('DOMContentLoaded', () => {
         new Audio('Sonidos/Sonido3.mp3'),
         new Audio('Sonidos/Sonido4.mp3'),
         new Audio('Sonidos/Sonido5.mp3')
-    ];    
+    ];
+
+    // Funcion para reproducir sonido de los botones
+    function Sonido_Boton() {
+        const clickSound = new Audio('Sonidos/Sonido6.mp3');
+        clickSound.play();
+    } 
+
+    // Funcion para reproducir musica
+    function ReproducirMusica() {
+        // Verificar si la música está habilitada
+        if (MusicaActiva) {
+            // Si la música está habilitada, reproducir sonido aleatorio
+            const randomIndex = Math.floor(Math.random() * Musicas.length);
+            const sound = Musicas[randomIndex];
+            sound.play();
+            sound.onended = () => {
+                // Si el sonido termina, verificar si la música aún está habilitada antes de reproducir otro sonido
+                if (MusicaActiva) {
+                    ReproducirMusica();
+                }
+            };
+        }
+    }   
 
     // API de Vibracion
     function Vibrar(duration) {
@@ -55,6 +78,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }           
 
+    // Añadir evento de orientación del dispositivo
+    function Evento_Giroscopio(){
+        if (window.DeviceOrientationEvent) {
+            window.addEventListener('deviceorientation', DetectarOrientacionEjes, true);
+        } else {
+            console.log("DeviceOrientationEvent no es soportado");
+        } 
+    } 
+    
     // Función para verificar la presencia del giroscopio
     function verificarGiroscopio() {
         if ('DeviceOrientationEvent' in window) {
@@ -62,18 +94,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (event.alpha !== null || event.beta !== null || event.gamma !== null) {
                     console.log("Giroscopio disponible");
                     DisponibilidadGiros = "GD";
-                    this.alert("Giroscopio disponible");
+                    alert("Giroscopio disponible");
                     // Giroscopio disponible
+                    Evento_Giroscopio();
                 } else {
                     console.log("Giroscopio no disponible");
                     DisponibilidadGiros = "GND";
-                    this.alert("Giroscopio no disponible");                    
+                    alert("Giroscopio no disponible");
                     // Giroscopio no disponible
                 }
             }, { once: true });
         } else {
             DisponibilidadGiros = "GNS";
-            this.alert("Giroscopio no soportado");
+            alert("Giroscopio no soportado");
             console.log("DeviceOrientationEvent no soportado");
             // DeviceOrientationEvent no es soportado
         }
@@ -82,9 +115,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Llamar a la función para verificar el giroscopio
     verificarGiroscopio();
 
-    // Funcion para invertir las cartas
+    // Función para invertir las cartas
     function InvertirCarta(card, value) {
-        SonidoBoton();
+        Sonido_Boton();
         if (CartasVolteadas.length < 2 && !card.classList.contains('flipped')) {
             card.classList.add('flipped');
             CartasVolteadas.push({ card, value });
@@ -96,10 +129,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (CartasVolteadas[0].value === CartasVolteadas[1].value) {
                     CartasEncontradas++;
                     CartasVolteadas = [];
-                    SonidoBoton();                    
+                    Sonido_Boton();                    
                 } else {
                     setTimeout(() => {
-                        SonidoBoton();  
+                        Sonido_Boton();  
                         if (ModoJuego === "MODO MOVIL"){
                             Vibrar(200);
                         }                                
@@ -124,47 +157,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 InvertirCarta(UltimaCartaVolteada, UltimaCartaVolteada.dataset.valor);
             }
         }
-    }
-    
-    // Añadir evento de orientación del dispositivo
-    function Evento_Giroscopio(){
-        if (window.DeviceOrientationEvent) {
-            window.addEventListener('deviceorientation', DetectarOrientacionEjes, true);
-        } else {
-            console.log("DeviceOrientationEvent no es soportado");
-        } 
-    }    
-    if (ModoJuego === "MODO MOVIL"){
-        Evento_Giroscopio();
-    }    
-    function ReproducirMusica() {
-        // Verificar si la música está habilitada
-        if (MusicaActiva) {
-            // Si la música está habilitada, reproducir sonido aleatorio
-            const randomIndex = Math.floor(Math.random() * Musicas.length);
-            const sound = Musicas[randomIndex];
-            sound.play();
-            sound.onended = () => {
-                // Si el sonido termina, verificar si la música aún está habilitada antes de reproducir otro sonido
-                if (MusicaActiva) {
-                    ReproducirMusica();
-                }
-            };
-        }
-    }     
-    
-    function SonidoBoton() {
-        const clickSound = new Audio('Sonidos/Sonido6.mp3');
-        clickSound.play();
-    }   
+    }       
 
-    function BarajarCarta(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
-    }    
-
+    // Funcion para crear las cartas y asignarle las funciones dependiendo de dispositivos
     function CrearCarta(value) {
         const card = document.createElement('div');
         card.classList.add('card');
@@ -176,6 +171,7 @@ document.addEventListener('DOMContentLoaded', () => {
             card.style.border = '1px solid red';
             card.style.transform = 'scale(1.001)';
             card.style.transition = 'all 0.2s ease';
+            UltimaCartaVolteada = card;
             
             switch(ModoJuego){
                 case "MODO PC":
@@ -205,9 +201,18 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });                   
         return card;
-    }       
+    }
 
-    function ResetearJuego() {                      
+    // Funcion para mezclar las cartas   
+    function Barajar_Carta(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }    
+
+    // Funcion para resetear el Juego
+    function Resetear_Juego() {                      
         CartasEncontradas = 0;
         CartasVolteadas = [];
         UltimaCartaVolteada = null;
@@ -217,20 +222,22 @@ document.addEventListener('DOMContentLoaded', () => {
             if (ModoJuego === "MODO MOVIL"){
                 Vibrar(250);
             }
-            IniciarJuego();
+            Iniciar_Juego();
         }, 500);
     }
 
-    function IniciarJuego() { 
+    // Funcion para inciar el juego
+    function Iniciar_Juego() { 
         if (JuegoIniciado === false){            
-            BarajarCarta(cardSet);
+            Barajar_Carta(cardSet);
             Cartas = cardSet.map(value => CrearCarta(value));
             Cartas.forEach(card => TableroJuego.appendChild(card));
             JuegoIniciado = true;  // Empezar Juego        
         }                           
     }
 
-    function ManejoMenus(IndiceMenu){
+    // Funcion de navegaccion entre menus
+    function Manejo_Menus(IndiceMenu){
         switch(IndiceMenu){
             case 0:
                 MenuInicio.style.display = 'block' // 0
@@ -243,7 +250,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 MenuModo.style.display = 'block' // 1
                 MenuJuego.style.display = 'none' // 2
                 MenuAjustes.style.display = 'none' // 3
-                IniciarJuego();
+                Iniciar_Juego();
                 break;
             case 2:
                 MenuInicio.style.display = 'none' // 0
@@ -261,14 +268,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     BotonJugar.addEventListener('click', () => {  
-        SonidoBoton();      
-        ManejoMenus(1);
+        Sonido_Boton();      
+        Manejo_Menus(1);
     });
 
     BotonPC.addEventListener('click', () => {  
         ModoJuego = "MODO PC"   
-        SonidoBoton();
-        ManejoMenus(2);
+        Sonido_Boton();
+        Manejo_Menus(2);
         
     });
  
@@ -278,43 +285,43 @@ document.addEventListener('DOMContentLoaded', () => {
             let confirmacion = confirm('¿Deseas permitir el uso del giroscopio para girar las cartas del juego?');
             if (confirmacion) {
                 GiroActivado = true;            
-                ManejoMenus(2);                  
+                Manejo_Menus(2);                  
             } else {
                 alert('Has rechazado el uso del giroscopio... Regresando a Inicio');                
-                ManejoMenus(0);
+                Manejo_Menus(0);
             }
         } else {
             GiroActivado = false;
             BotonGirosCopio.textContent = 'Girar Imagen No';
             alert('El uso del giroscopio ha sido deshabilitado. No se puede juugar en modo Movil... Regresando a Inicio');            
-            ManejoMenus(0);
+            Manejo_Menus(0);
         } 
-        SonidoBoton();                   
+        Sonido_Boton();                   
     });
     
     BotonResetear.addEventListener('click', () => {
-        SonidoBoton();        
+        Sonido_Boton();        
         JuegoIniciado = false;  // El juego se reinicia antes de poder volver a iniciarlo.
-        ResetearJuego();
+        Resetear_Juego();
     });
 
     BotonAjustes.addEventListener('click', () =>{
-        SonidoBoton();
+        Sonido_Boton();
         if (ModoJuego === "MODO PC"){
-            ManejoMenus(3);
+            Manejo_Menus(3);
         }
         if (ModoJuego === "MODO MOVIL"){
-            ManejoMenus(3);
+            Manejo_Menus(3);
         }
     })
 
     BotonRegresar.addEventListener('click', () => {
-        SonidoBoton();
-        ManejoMenus(2);
+        Sonido_Boton();
+        Manejo_Menus(2);
     })
 
     BotonMusica.addEventListener('click', () => {          
-        SonidoBoton();
+        Sonido_Boton();
         if (MusicaActiva === true) {
             // Si la música está activada, detenerla            
             BotonMusica.textContent = 'Musica >> NO';
@@ -329,11 +336,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });    
 
     BotonInicio.addEventListener('click', () => {
-        SonidoBoton();
+        Sonido_Boton();
         MusicaActiva = false;        
         BotonMusica.textContent = 'Musica';
-        ResetearJuego();
+        Resetear_Juego();
         JuegoIniciado = false;
-        ManejoMenus(0);
+        Manejo_Menus(0);
     })
 });
