@@ -86,28 +86,28 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log("DeviceOrientationEvent no es soportado");
         } 
     } 
-    
+
     // Función para verificar la presencia del giroscopio
     function verificarGiroscopio() {
         if ('DeviceOrientationEvent' in window) {
             window.addEventListener('deviceorientation', function(event) {
                 if (event.alpha !== null || event.beta !== null || event.gamma !== null) {
-                    console.log("Giroscopio disponible");
+                    console.log("Giroscopio disponible para las cartas en modo MODO MOVIL");
                     DisponibilidadGiros = "GD";
-                    alert("Giroscopio disponible");
+                    alert("Giroscopio disponible para las cartas en modo MODO MOVIL");
                     // Giroscopio disponible
                     Evento_Giroscopio();
                 } else {
-                    console.log("Giroscopio no disponible");
+                    console.log("Giroscopio no disponible para las cartas en modo MODO MOVIL");
                     DisponibilidadGiros = "GND";
-                    alert("Giroscopio no disponible");
+                    alert("Giroscopio no disponible para las cartas en modo MODO MOVIL");
                     // Giroscopio no disponible
                 }
             }, { once: true });
         } else {
             DisponibilidadGiros = "GNS";
-            alert("Giroscopio no soportado");
-            console.log("DeviceOrientationEvent no soportado");
+            alert("Giroscopio no soportado para las cartas en modo MODO MOVIL");
+            console.log("DeviceOrientationEvent no soportado para las cartas en modo MODO MOVIL");
             // DeviceOrientationEvent no es soportado
         }
     }
@@ -116,11 +116,11 @@ document.addEventListener('DOMContentLoaded', () => {
     verificarGiroscopio();
 
     // Función para invertir las cartas
-    function InvertirCarta(card, value) {
+    function InvertirCarta(Carta, Valor) {
         Sonido_Boton();
-        if (CartasVolteadas.length < 2 && !card.classList.contains('flipped')) {
-            card.classList.add('flipped');
-            CartasVolteadas.push({ card, value });
+        if (CartasVolteadas.length < 2 && !Carta.classList.contains('flipped')) {
+            Carta.classList.add('flipped');
+            CartasVolteadas.push({ card: Carta, value: Valor });
             if (ModoJuego === "MODO MOVIL"){
                 Vibrar(200);
             }
@@ -160,23 +160,23 @@ document.addEventListener('DOMContentLoaded', () => {
     }       
 
     // Funcion para crear las cartas y asignarle las funciones dependiendo de dispositivos
-    function CrearCarta(value) {
-        const card = document.createElement('div');
-        card.classList.add('card');
-        card.innerHTML = ` 
+    function CrearCarta(Valor) {
+        const Carta = document.createElement('div');
+        Carta.classList.add('card');
+        Carta.innerHTML = ` 
             <div class="front"></div>
-            <div class="back">${value}</div>
+            <div class="back">${Valor}</div>
         `;
-        card.addEventListener('click', () => {
-            card.style.border = '1px solid red';
-            card.style.transform = 'scale(1.001)';
-            card.style.transition = 'all 0.2s ease';
-            UltimaCartaVolteada = card;
+        Carta.addEventListener('click', () => {
+            Carta.style.border = '1px solid red';
+            Carta.style.transform = 'scale(1.0001)';
+            Carta.style.transition = 'all 0.2s ease';
+            UltimaCartaVolteada = Carta;
             
             switch(ModoJuego){
                 case "MODO PC":
                     setTimeout(() => {
-                        InvertirCarta(card, value);
+                        InvertirCarta(Carta, Valor);
                     }, 200); // Modo PC
                     break;
                 case "MODO MOVIL":
@@ -187,20 +187,20 @@ document.addEventListener('DOMContentLoaded', () => {
                         case "GND":
                             // No se tiene disponible el Giroscopio
                             setTimeout(() => {
-                                InvertirCarta(card, value);
+                                InvertirCarta(Carta, Valor);
                             }, 200);
                             break;
                         case "GNS":
                             // No se soporta tecnología Giroscopio
                             setTimeout(() => {
-                                InvertirCarta(card, value);
+                                InvertirCarta(Carta, Valor);
                             }, 200);
                             break;
                     }
                     break;
             }
         });                   
-        return card;
+        return Carta;
     }
 
     // Funcion para mezclar las cartas   
