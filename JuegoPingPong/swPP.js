@@ -14,9 +14,9 @@ var urlsToCache = [
   '/Sonidos/Sonido4.mp3',
   '/Sonidos/Sonido5.mp3',
   '/Sonidos/Sonido6.mp3',
-  '/CodigoPingPong.js',
-  '/EstilosPingPong.css',
-  '/IndexPingPong.html',
+  '/CodigoPP.js',
+  '/EstilosPP.css',
+  '/IndexPP.html',
   '/ManifiestoPP.json',  
   '/swPP.js',  
 ];
