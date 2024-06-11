@@ -18,7 +18,7 @@ var urlsToCache = [
   '/EstilosPingPong.css',
   '/IndexPingPong.html',
   '/ManifiestoPP.json',  
-  '/sxPP.js',  
+  '/swPP.js',  
 ];
 
 // Evento de instalación
