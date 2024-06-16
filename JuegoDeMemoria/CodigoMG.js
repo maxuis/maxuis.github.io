@@ -33,7 +33,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let JuegoIniciado = false; // Estado del juego
     let ModoJuego = "Nada"; // Modo de juego seleccionado
     let IndiceMenu = 0; // Índice del menú seleccionado
-    let DisponibilidadGiros = "Nada"
+    let DisponibilidadGiros = "Nada";
+    let CartaSeleccionada = false;
 
     // Valores de las cartas
     const ValorCartas = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
@@ -76,7 +77,19 @@ document.addEventListener('DOMContentLoaded', () => {
         if (navigator.vibrate) {
             navigator.vibrate(duration);
         }
-    }           
+    }    
+
+    // Detección de la orientación del dispositivo
+    function DetectarOrientacionEjes(event) {
+        const gamma = event.gamma;
+        const beta = event.beta;
+        const alpha = event.alpha;
+        if ((Math.abs(gamma) > 20) || (Math.abs(beta) > 20) || (Math.abs(alpha) > 20)) {
+            if (CartasVolteadas.length < 2 && !UltimaCartaVolteada.classList.contains('flipped')) {
+                InvertirCarta(UltimaCartaVolteada, UltimaCartaVolteada.dataset.valor);
+            }
+        }        
+    }
 
     // Añadir evento de orientación del dispositivo
     function Evento_Giroscopio(){
@@ -145,19 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         }              
-    }
-
-    // Detección de la orientación del dispositivo
-    function DetectarOrientacionEjes(event) {
-        const gamma = event.gamma;
-        const beta = event.beta;
-        const alpha = event.alpha;
-        if ((Math.abs(gamma) > 20) || (Math.abs(beta) > 20) || (Math.abs(alpha) > 20)) {
-            if (CartasVolteadas.length < 2 && !UltimaCartaVolteada.classList.contains('flipped')) {
-                InvertirCarta(UltimaCartaVolteada, UltimaCartaVolteada.dataset.valor);
-            }
-        }
-    }       
+    }          
 
     // Funcion para crear las cartas y asignarle las funciones dependiendo de dispositivos
     function CrearCarta(Valor) {
