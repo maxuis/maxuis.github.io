@@ -1,0 +1,46 @@
+{
+    "background_color": "#000000",
+    "dir": "ltr",
+    "display": "fullscreen",
+    "name": "PONG 0",
+    "orientation": "any",
+    "scope": "/",
+    "short_name": "P_0",
+    "theme_color": "#800000",
+    "id": "G_S_C_S",
+    "description": "Instalar JUEGO PONG, un juego de jugador contra máquina en Unity.",
+    "categories": [
+      "games"
+    ],
+    "start_url": "Index.html",
+    "icons": [
+      {
+        "src": "Imagenes/Icono.png",
+        "sizes": "512x512",
+        "type": "image/png"
+      }
+    ],
+    "screenshots": [
+      {
+        "src": "Imagenes/Captura 1.png",
+        "sizes": "640x480",
+        "type": "image/png"
+      },
+      {
+        "src": "Imagenes/Captura 2.png",
+        "sizes": "640x480",
+        "type": "image/png"
+      }
+      ,
+      {
+        "src": "Imagenes/Captura 3.png",
+        "sizes": "640x480",
+        "type": "image/png"
+      },
+      {
+        "src": "Imagenes/Captura 4.png",
+        "sizes": "640x480",
+        "type": "image/png"
+      }
+    ]
+  }
