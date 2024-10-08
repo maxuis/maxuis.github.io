@@ -117,7 +117,7 @@
     </script>
     <script>
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/SW.js').then(function(registration) {
+        navigator.serviceWorker.register('/sw.js').then(function(registration) {
           console.log('Service Worker registrado con éxito:', registration);
         }).catch(function(error) {
           console.log('Fallo en el registro del Service Worker:', error);
