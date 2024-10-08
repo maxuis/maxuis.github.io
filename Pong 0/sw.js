@@ -1,10 +1,10 @@
 // Nombre del caché
-var CACHE_NAME_TTT = 'Cache-PWA-TTT';
+var CACHE_NAME_TTT = 'Cache-PWA-P-0';
 
 // Lista de archivos a cachear
 var urlsToCache = [
   '/',  
-  '/Build/Pong 0.Databr',
+  '/Build/Pong 0.data.br',
   '/Build/Pong 0.framework.js.br',
   '/Build/Pong 0.loader.js',
   '/Build/Pong 0.wasm.br',
@@ -27,7 +27,7 @@ var urlsToCache = [
   '/TemplateData/webgl-logo.png',
   '/index.html',
   '/Manifiesto.json',
-  '/SW.js'
+  '/sw.js'
 ];
 
 // Evento de instalación
